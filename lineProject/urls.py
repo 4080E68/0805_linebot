@@ -19,5 +19,7 @@ from linebotApp import views
 from django.urls import include, re_path
 urlpatterns = [
     re_path('^callback', views.callback),
+    # re_path('updateDate/<int:id>/', views.update_job),
+    re_path(r'^updateDate/(?P<id>\w+)/$', views.update_job, name='update_job'),
     path('admin/', admin.site.urls),
 ]

@@ -1,3 +1,4 @@
+from cmath import log
 from django.shortcuts import render
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
@@ -5,6 +6,8 @@ from linebot.models import *
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from linebotApp import func
+from linebotApp.models import *
 
 # Create your views here.
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
@@ -21,7 +24,7 @@ def callback(request):
 
         try:
             events = parser.parse(body, signature)
-            print(events)
+            lineId = events[0].source.user_id
         except InvalidSignatureError:
             return HttpResponseForbidden()
         except LineBotApiError:
@@ -30,16 +33,33 @@ def callback(request):
         for event in events:
             if isinstance(event, MessageEvent):  # 如果有訊息事件
                 msg = event.message.text
-            line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text=msg))
-
-            # if msg[:3] == '&&&' and len(msg) > 3:
-            #     func2.manageForm(event, msg)
-            # if msg == '@健保查詢':
-            #     line_bot_api.reply_message(
-            #         event.reply_token, TextSendMessage(text='https://liff.line.me/1656626380-Z7knz9PR'))
+            if msg == '@我要求職':
+                func.job(event, lineId)
+            if msg[:7] == '@登記求職資料' and len(msg) > 3:
+                func.job_register(event, msg, lineId)
+            if msg[:7] == '@修改求職資料' and len(msg) > 3:
+                func.update_job(event, msg, lineId)
+            if msg == '@求職資料修改':
+                if job_hunting.objects.filter(lineId=lineId).exists():
+                    url = 'http://127.0.0.1:8000/updateDate/' + str(lineId)
+                    line_bot_api.reply_message(
+                        event.reply_token, TextSendMessage(text=url))
+                else:
+                    line_bot_api.reply_message(
+                        event.reply_token, TextSendMessage(text='查無資料請確認是否有進行註冊！'))
 
         return HttpResponse()
 
     else:
         return HttpResponseBadRequest()
+
+
+def update_job(request, id):
+    if job_hunting.objects.filter(lineId=id).exists():
+        userData = job_hunting.objects.get(lineId=id)
+        userName = userData.name
+        userSalary = userData.salary
+        userAddress = userData.address
+        userPhone = userData.Phone
+
+    return render(request, 'update_job.html', locals())
