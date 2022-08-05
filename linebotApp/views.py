@@ -42,7 +42,8 @@ def callback(request):
                 func.update_job(event, msg, lineId)
             if msg == '@求職資料修改':
                 if job_hunting.objects.filter(lineId=lineId).exists():
-                    url = 'https://joblinebotapp.herokuapp.com/' + str(lineId)
+                    url = 'https://joblinebotapp.herokuapp.com/updateDate/' + \
+                        str(lineId)
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text=url))
                 else:
