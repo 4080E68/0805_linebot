@@ -24,7 +24,7 @@ def callback(request):
 
         try:
             events = parser.parse(body, signature)
-            lineId = events[0].source.user_id
+
         except InvalidSignatureError:
             return HttpResponseForbidden()
         except LineBotApiError:
@@ -33,11 +33,12 @@ def callback(request):
         for event in events:
             if isinstance(event, MessageEvent):  # 如果有訊息事件
                 msg = event.message.text
+                lineId = events[0].source.user_id
             if msg == '@我要求職':
                 func.job(event, lineId)
             if msg[:7] == '@登記求職資料' and len(msg) > 3:
                 func.job_register(event, msg, lineId)
-            if msg[:7] == '@修改求職資料' and len(msg) > 3:
+            if msg[:7] == '@確認修改資料' and len(msg) > 3:
                 func.update_job(event, msg, lineId)
             if msg == '@求職資料修改':
                 if job_hunting.objects.filter(lineId=lineId).exists():
@@ -58,7 +59,8 @@ def update_job(request, id):
     if job_hunting.objects.filter(lineId=id).exists():
         userData = job_hunting.objects.get(lineId=id)
         userName = userData.name
-        userSalary = userData.salary
+        userSalary = userData.salary[2:]
+        userSalary1 = userData.salary
         userAddress = userData.address
         userPhone = userData.Phone
 

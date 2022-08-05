@@ -6,6 +6,7 @@ import datetime
 import requests
 from urllib.request import urlretrieve
 
+
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 
 

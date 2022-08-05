@@ -9,36 +9,100 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
         crossorigin="anonymous"></script>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <title>修改資料</title>
 </head>
 <body>
     <div class="container">
         <br>
         <div class="text-center">
-            <h2>修改資料</h2>
+            <h1>修改資料</h1>
         </div>
         <form>
             <div class="mb-3">
                 <label for="name" class="form-label">姓名</label>
                 <input class="form-control" type="text" id="name" value="{{userName}}">
             </div>
-            <div class="mb-3">
-                <label for="salary" class="form-label">期望薪資</label>
-                <input class="form-control" type="text" id="salary" value="{{userSalary}}">
+            <div class="row g-3">
+                <div class="col">
+                    <label for="salary" class="form-label">類別</label>
+                    <select class="form-select" id="select">
+                        <option value="日薪">日薪</option>
+                        <option value="月薪">月薪</option>
+                        <option value="時薪">時薪</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="salary" class="form-label">期望薪資</label>
+                    <input class="form-control" type="text" id="salary" value="{{userSalary}}">
+                    <input type="hidden" name="" id="salary1" value="{{userSalary1}}">
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="address" class="form-label">期望工作地點</label>
-                <input class="form-control" type="text" id="address" value="{{userAddress}}">
+            <br>
+            <div class="row">
+                <div class="mb-3">
+                    <label for="address" class="form-label">期望工作地點</label>
+                    <input class="form-control" type="text" id="address" value="{{userAddress}}">
+                </div>
             </div>
+
             <div class="mb-3">
                 <label for="phone" class="form-label">聯絡電話</label>
                 <input class="form-control" type="text" id="phone" value="{{userPhone}}">
             </div>
 
             <div class="d-grid gap-2">
-                <button class="btn btn-primary" type="submit">送出</button>
+                <button class="btn btn-primary" type="button" onclick="push()">送出</button>
             </div>
         </form>
     </div>
 </body>
+<script>
+    // Using a Promise object
+    let option = document.querySelectorAll('option')
+    let salary = document.getElementById('salary').value
+    let salary1 = document.getElementById('salary1').value
+    option.forEach(e => {
+        if (e.text == salary1.substr(0, 2)) {
+            e.selected = true
+        }
+    });
+    liff
+        .init({
+            liffId: "1656626380-Oe7DErqn", // Use own liffId
+        })
+
+        .then((profile) => {
+            liff.getProfile();
+            const userId = profile.userId;
+        })
+</script>
+<script>
+    function push() {
+        let name = document.getElementById('name').value
+        let salary = document.getElementById('salary').value
+        let address = document.getElementById('address').value
+        let phone = document.getElementById('phone').value
+        let select = document.getElementById('select').value
+
+        var msg = "@確認修改資料";  //回傳訊息字串
+        msg = msg + name + "&";
+        msg = msg + select + salary + "&";
+        msg = msg + address + "&";
+        msg = msg + phone;
+        console.log(msg);
+
+        // liff.sendMessages([  //推播訊息
+        //     {
+        //         type: 'text',
+        //         text: msg
+        //     }
+        // ])
+        //     .then(() => {
+        //         liff.closeWindow();  //關閉視窗
+        //     })
+    }
+
+</script>
+
 </html>
