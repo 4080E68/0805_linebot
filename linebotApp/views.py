@@ -64,5 +64,8 @@ def update_job(request, id):
         userSalary1 = userData.salary
         userAddress = userData.address
         userPhone = userData.Phone
+    if request.method == "POST":
+        name = request.POST['name']
+        print(name)
 
     return render(request, 'update_job.html', locals())
