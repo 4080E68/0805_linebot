@@ -30,6 +30,8 @@ def callback(request):
         for event in events:
             if isinstance(event, MessageEvent):  # 如果有訊息事件
                 msg = event.message.text
+            line_bot_api.reply_message(
+                event.reply_token, TextSendMessage(text=msg))
 
             # if msg[:3] == '&&&' and len(msg) > 3:
             #     func2.manageForm(event, msg)
