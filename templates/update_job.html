@@ -72,34 +72,7 @@
     });
 
     function sub() {
-        alert('{{message}}')
-        window.open('', '_self', ''); window.close();
-        if (firefox) {
-            var opened = window.open('about:blank', '_self');
-            opened.opener = null;
-            opened.close();
-        } else {
-            window.opener = null;
-            window.open('', '_self');
-            window.close();
-        }
-        if (navigator.userAgent.indexOf("MSIE") > 0) {
-            if (navigator.userAgent.indexOf("MSIE 6.0") > 0) {    //適用於ie6不帶提示關閉視窗
-                window.opener = null;
-                window.close();
-            } else {
-                window.open('', '_top');         //ie7之後不提示關閉視窗
-                window.top.close();
-            }
-        }
-        else if (navigator.userAgent.indexOf("Firefox") > 0) {        //Firefox不提示關閉視窗
-            window.location.href = 'about:blank ';
-        } else {
-            window.opener = null;
-            window.open('', '_self', '');        //其他瀏覽器
-            window.close();
-        }
-
+        alert('修改成功！您現在可以關閉此視窗')
     }
 </script>
 
