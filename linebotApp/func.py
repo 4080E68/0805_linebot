@@ -41,25 +41,25 @@ def job_register(event, msg, lineId):  # 註冊資料
             event.reply_token, TextSendMessage(text='註冊成功！'))
 
 
-def update_job(event, msg, lineId):  # 修改資料
-    flist = msg[7:].split('&')
-    name = flist[0]
-    salary = flist[1]
-    address = flist[2]
-    Phone = flist[3]
-    lineid = lineId
+# def update_job(event, msg, lineId):  # 修改資料
+#     flist = msg[7:].split('&')
+#     name = flist[0]
+#     salary = flist[1]
+#     address = flist[2]
+#     Phone = flist[3]
+#     lineid = lineId
 
-    print(name, salary, address, Phone, lineid)
-    if job_hunting.objects.filter(lineId=lineId).exists():
-        try:
-            job_hunting.objects.filter(lineId=lineId).update(
-                name=name, salary=salary, address=address, Phone=Phone, lineId=lineid
-            )
-            line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text='修改成功！'))
-        except:
-            line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text='修改失敗！'))
-    else:
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text='查無資料請確認是否有進行註冊！'))
+#     print(name, salary, address, Phone, lineid)
+#     if job_hunting.objects.filter(lineId=lineId).exists():
+#         try:
+#             job_hunting.objects.filter(lineId=lineId).update(
+#                 name=name, salary=salary, address=address, Phone=Phone, lineId=lineid
+#             )
+#             line_bot_api.reply_message(
+#                 event.reply_token, TextSendMessage(text='修改成功！'))
+#         except:
+#             line_bot_api.reply_message(
+#                 event.reply_token, TextSendMessage(text='修改失敗！'))
+#     else:
+#         line_bot_api.reply_message(
+#             event.reply_token, TextSendMessage(text='查無資料請確認是否有進行註冊！'))

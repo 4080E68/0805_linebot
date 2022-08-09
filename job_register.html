@@ -83,17 +83,16 @@
         msg = msg + select + salary + "&";
         msg = msg + address + "&";
         msg = msg + phone;
-        console.log(msg);
 
-        // liff.sendMessages([  //推播訊息
-        //     {
-        //         type: 'text',
-        //         text: msg
-        //     }
-        // ])
-        //     .then(() => {
-        //         liff.closeWindow();  //關閉視窗
-        //     })
+        liff.sendMessages([  //推播訊息
+            {
+                type: 'text',
+                text: msg
+            }
+        ])
+            .then(() => {
+                liff.closeWindow();  //關閉視窗
+            })
     }
 
 </script>

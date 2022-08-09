@@ -54,14 +54,13 @@
             </div>
 
             <div class="d-grid gap-2">
-                <button class="btn btn-primary" type="submit" onclick="window.close()">送出</button>
+                <button class="btn btn-primary" type="submit" onclick="sub()">送出</button>
             </div>
         </form>
-        <a href="javascript:window.opener=null;window.open('','_self');window.close();">關閉</a>
 
     </div>
 </body>
-<script>
+<script type="text/javascript">
     // Using a Promise object
     let option = document.querySelectorAll('option')
     let salary = document.getElementById('salary').value
@@ -72,42 +71,36 @@
         }
     });
 
-    // liff
-    //     .init({
-    //         liffId: "1656626380-aee0ogjy", // Use own liffId
-    //     })
+    function sub() {
+        alert('{{message}}')
+        window.open('', '_self', ''); window.close();
+        if (firefox) {
+            var opened = window.open('about:blank', '_self');
+            opened.opener = null;
+            opened.close();
+        } else {
+            window.opener = null;
+            window.open('', '_self');
+            window.close();
+        }
+        if (navigator.userAgent.indexOf("MSIE") > 0) {
+            if (navigator.userAgent.indexOf("MSIE 6.0") > 0) {    //適用於ie6不帶提示關閉視窗
+                window.opener = null;
+                window.close();
+            } else {
+                window.open('', '_top');         //ie7之後不提示關閉視窗
+                window.top.close();
+            }
+        }
+        else if (navigator.userAgent.indexOf("Firefox") > 0) {        //Firefox不提示關閉視窗
+            window.location.href = 'about:blank ';
+        } else {
+            window.opener = null;
+            window.open('', '_self', '');        //其他瀏覽器
+            window.close();
+        }
 
-    //     .then((profile) => {
-    //         liff.getProfile();
-    //         const userId = profile.userId;
-    //     })
-</script>
-<script>
-    // function push() {
-    //     let name = document.getElementById('name').value
-    //     let salary = document.getElementById('salary').value
-    //     let address = document.getElementById('address').value
-    //     let phone = document.getElementById('phone').value
-    //     let select = document.getElementById('select').value
-
-    //     var msg = "@確認修改資料";  //回傳訊息字串
-    //     msg = msg + name + "&";
-    //     msg = msg + select + salary + "&";
-    //     msg = msg + address + "&";
-    //     msg = msg + phone;
-    //     console.log(msg);
-
-    //     // liff.sendMessages([  //推播訊息
-    //     //     {
-    //     //         type: 'text',
-    //     //         text: msg
-    //     //     }
-    //     // ])
-    //     //     .then(() => {
-    //     //         liff.closeWindow();  //關閉視窗
-    //     //     })
-    // }
-
+    }
 </script>
 
 </html>
