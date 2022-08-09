@@ -18,7 +18,7 @@
         <div class="text-center">
             <h1>求職資料註冊</h1>
         </div>
-        <form>
+        <form id="form">
             <div class="mb-3">
                 <label for="name" class="form-label">姓名</label>
                 <input class="form-control" type="text" id="name" required>
@@ -54,7 +54,7 @@
             </div>
 
             <div class="d-grid gap-2">
-                <button class="btn btn-primary" type="submit" onclick="push()">送出</button>
+                <button class="btn btn-primary" type="button" onclick="push()">送出</button>
             </div>
         </form>
     </div>
@@ -103,7 +103,7 @@
         let address = document.getElementById('address').value
         let phone = document.getElementById('phone').value
         let select = document.getElementById('select').value
-
+        let form = document.getElementById('form')
         if (name == '' || salary == '' || address == '' || phone == '' || select == '') {
             return alert('請填寫所需資料！')
         } else {
