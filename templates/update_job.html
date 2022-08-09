@@ -29,9 +29,9 @@
                 <div class="col">
                     <label for="salary" class="form-label">類別</label>
                     <select class="form-select" id="select" name="select">
-                        <option value="日薪">日薪</option>
-                        <option value="月薪">月薪</option>
-                        <option value="時薪">時薪</option>
+                        <option id="option" value="日薪">日薪</option>
+                        <option id="option" value="月薪">月薪</option>
+                        <option id="option" value="時薪">時薪</option>
                     </select>
                 </div>
                 <div class="col">
@@ -44,7 +44,8 @@
             <div class="row">
                 <div class="mb-3">
                     <label for="address" class="form-label">期望工作地點</label>
-                    <input class="form-control" type="text" id="address" value="{{userAddress}}" name="address">
+                    <input type="hidden" name="" id="addressData" value="{{userAddress}}">
+                    <select class="form-select" id="address" name="address" required></select>
                 </div>
             </div>
 
@@ -62,7 +63,7 @@
 </body>
 <script type="text/javascript">
     // Using a Promise object
-    let option = document.querySelectorAll('option')
+    let option = document.querySelectorAll('#option')
     let salary = document.getElementById('salary').value
     let salary1 = document.getElementById('salary1').value
     option.forEach(e => {
@@ -70,7 +71,32 @@
             e.selected = true
         }
     });
-
+    let address = document.getElementById('address');
+    fetch('https://soa.tainan.gov.tw/Api/Service/Get/14553e2b-0ef0-44fa-bfa3-b4f6a73ed6fa')
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (myJson) {
+            myJson.data.forEach((element, index) => {
+                if (index >= 3) {
+                    if (element.行政區[5] == '行') {
+                        element.行政區 = element.行政區.substr(0, 5)
+                    } else {
+                        element.行政區 = element.行政區.substr(0, 6)
+                    }
+                    address.options[address.options.length] = new Option(element.行政區, element.行政區);
+                }
+            });
+        });
+    setTimeout(() => {
+        let addressOption = document.querySelectorAll('#address option')
+        let addressData = document.getElementById('addressData').value
+        addressOption.forEach((e) => {
+            if (e.text == addressData) {
+                e.selected = true
+            }
+        })
+    }, 300)
     function sub() {
         alert('修改成功！您現在可以關閉此視窗')
     }

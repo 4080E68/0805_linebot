@@ -26,8 +26,8 @@
             <div class="row g-3">
                 <div class="col">
                     <label for="salary" class="form-label">類別</label>
-                    <select class="form-select" id="select">
-                        <option value="" disabled selected required>請選擇薪資類別</option>
+                    <select class="form-select" id="select" required>
+                        <option value="">請選擇薪資類別</option>
                         <option value="時薪">時薪</option>
                         <option value="日薪">日薪</option>
                         <option value="月薪">月薪</option>
@@ -43,7 +43,8 @@
             <div class="row">
                 <div class="mb-3">
                     <label for="address" class="form-label">期望工作地點</label>
-                    <input class="form-control" type="text" id="address" required>
+                    <select class="form-select" id="address" required>
+                    </select>
                 </div>
             </div>
 
@@ -59,7 +60,32 @@
     </div>
 </body>
 <script>
-    // Using a Promise object
+    let address = document.getElementById('address');
+    fetch('https://soa.tainan.gov.tw/Api/Service/Get/14553e2b-0ef0-44fa-bfa3-b4f6a73ed6fa')
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (myJson) {
+            myJson.data.forEach((element, index) => {
+                if (index >= 3) {
+                    console.log(element.行政區);
+                    if (element.行政區[5] == '行') {
+                        element.行政區 = element.行政區.substr(0, 5)
+                    } else {
+                        element.行政區 = element.行政區.substr(0, 6)
+                    }
+                    address.options[address.options.length] = new Option(element.行政區, element.行政區);
+                }
+            });
+        });
+    // fetch("https://api.nlsc.gov.tw/other/ListCounty")
+    //     .then(response => response.text())
+    //     .then(data => {
+    //         const parser = new DOMParser();
+    //         const xml = parser.parseFromString(data, "application/xml");
+    //         console.log(xml);
+    //     })
+    //     .catch(console.error);
     liff
         .init({
             liffId: "1656626380-ZrL4j5xO", // Use own liffId
