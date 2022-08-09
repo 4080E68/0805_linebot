@@ -114,10 +114,10 @@ def update_job(request, id):
         phone = request.POST['phone']
         if job_hunting.objects.filter(lineId=id).exists():
             try:
+                message = '修改成功！您現在可以關閉此視窗'
                 job_hunting.objects.filter(lineId=id).update(
                     name=name, salary=finalSalary, address=address, Phone=phone
                 )
-                message = '修改成功！您現在可以關閉此視窗'
             except:
                 message = '修改失敗！'
     return render(request, 'update_job.html', locals())
