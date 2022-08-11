@@ -23,8 +23,13 @@
                 <label for="name" class="form-label">姓名</label>
                 <input class="form-control" type="text" id="name" required>
             </div>
-            <div class="row g-3">
-                <div class="col">
+            <div class="row">
+                <label for="salary" class="form-label">期望薪資</label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon3">時薪</span>
+                    <input type="number" class="form-control" id="salary" aria-describedby="basic-addon3">
+                </div>
+                <!-- <div class="col">
                     <label for="salary" class="form-label">類別</label>
                     <select class="form-select" id="select" required>
                         <option value="">請選擇薪資類別</option>
@@ -37,12 +42,15 @@
                     <label for="salary" class="form-label">期望薪資</label>
                     <input class="form-control" type="number" id="salary" required>
                     <input type="hidden" name="" id="salary1">
-                </div>
+
+                </div> -->
             </div>
-            <br>
             <div class="row">
                 <div class="mb-3">
-                    <label for="address" class="form-label">期望工作地點</label>
+                    <label for="County" class="form-label">請選擇求職縣市</label>
+                    <select class="form-select" id="County" required></select>
+                    <br>
+                    <label for="address" class="form-label">請選擇求職地區</label>
                     <select class="form-select" id="address" required>
                     </select>
                 </div>
@@ -52,6 +60,13 @@
                 <label for="phone" class="form-label">聯絡電話</label>
                 <input class="form-control" type="text" id="phone" required>
             </div>
+
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
+                    style="height: 100px"></textarea>
+                <label for="floatingTextarea2">備註</label>
+            </div>
+            <br>
 
             <div class="d-grid gap-2">
                 <button class="btn btn-primary" type="button" onclick="push()">送出</button>
@@ -128,13 +143,32 @@
             '南竿鄉', '北竿鄉', '莒光鄉', '東引鄉'
         ]
     }
-    let test = '金門縣'
 
-    let a = Object.keys(area_data)
-    a.forEach((e) => {
-        console.log(e);
-    })
+    let County_data = Object.keys(area_data)
+    let area = Object.values(area_data)
+    let County = document.getElementById('County')
     let address = document.getElementById('address');
+
+    County_data.forEach((e, index) => {
+        County.options[County.options.length] = new Option(e, e);
+    })
+    area_data.臺北市.forEach((e) => {
+        address.options[address.options.length] = new Option(e, e);
+    })
+    County.addEventListener('change', () => {
+        let County_result = document.getElementById('County').value
+        address.innerHTML = ''
+        for (let i in area_data) {
+            if (i == County_result) {
+                area_data[i].forEach((e) => {
+                    address.options[address.options.length] = new Option(e, e);
+                })
+            } else {
+                continue
+            }
+        }
+    })
+
     fetch('https://soa.tainan.gov.tw/Api/Service/Get/14553e2b-0ef0-44fa-bfa3-b4f6a73ed6fa')
         .then(function (response) {
             return response.json();
@@ -147,7 +181,7 @@
                     } else {
                         element.行政區 = element.行政區.substr(0, 6)
                     }
-                    address.options[address.options.length] = new Option(element.行政區, element.行政區);
+                    // address.options[address.options.length] = new Option(element.行政區, element.行政區);
                 }
             });
         });
@@ -175,16 +209,24 @@
         let salary = document.getElementById('salary').value
         let address = document.getElementById('address').value
         let phone = document.getElementById('phone').value
-        let select = document.getElementById('select').value
+        let County_result = document.getElementById('County').value
+        let remark = document.getElementById('floatingTextarea2').value
+        if (remark == '') {
+            remark = '無'
+        }
+        // let select = document.getElementById('select').value
         let form = document.getElementById('form')
-        if (name == '' || salary == '' || address == '' || phone == '' || select == '') {
+        if (name == '' || salary == '' || phone == '') {
             return alert('請填寫所需資料！')
         } else {
             var msg = "@登記求職資料";  //回傳訊息字串
             msg = msg + name + "&";
-            msg = msg + select + salary + "&";
-            msg = msg + address + "&";
-            msg = msg + phone;
+            // msg = msg + select + salary + "&";
+            msg = msg + '時薪' + salary + "&";
+            msg = msg + County_result + address + "&";
+            msg = msg + phone + "&";
+            msg = msg + remark;
+            console.log(msg);
 
             liff.sendMessages([  //推播訊息
                 {
