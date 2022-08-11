@@ -41,7 +41,8 @@ def callback(request):
                     data = job_hunting.objects.get(lineId=lineId)
                     message = '姓名：' + str(data.name) + '\n' + '期望薪資：' + str(data.salary) + \
                         '\n' + '聯絡電話：' + str(data.Phone) + \
-                        '\n'+'期望工作地點：' + str(data.address)
+                        '\n'+'期望工作地點：' + str(data.address) + \
+                        '\n'+'備註：' + str(data.remark)
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text=message))
             if msg[:7] == '@登記求職資料' and len(msg) > 3:
@@ -103,19 +104,22 @@ def update_job(request, id):
         userName = userData.name
         userSalary = userData.salary[2:]
         userSalary1 = userData.salary
-        userAddress = userData.address
+        userCounty = userData.address[:3]
+        userAddress = userData.address[3:]
         userPhone = userData.Phone
+        userRemark = userData.remark
     if request.method == "POST":
         name = request.POST['name']
-        select = request.POST['select']
-        salary = request.POST['salary']
-        finalSalary = select + salary
-        address = request.POST['address']
+        salary = '時薪'+request.POST['salary']
+        address = request.POST['County']+request.POST['address']
         phone = request.POST['phone']
+        remark = request.POST['remark']
+        print(name, salary, address, phone, remark)
+
         if job_hunting.objects.filter(lineId=id).exists():
             try:
                 job_hunting.objects.filter(lineId=id).update(
-                    name=name, salary=finalSalary, address=address, Phone=phone
+                    name=name, salary=salary, address=address, Phone=phone, remark=remark
                 )
             except:
                 message = '修改失敗！'
