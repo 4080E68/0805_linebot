@@ -53,95 +53,132 @@ def callback(request):
                 if job_hunting.objects.filter(lineId=lineId).exists():
                     url = 'https://joblinebotapp.herokuapp.com/updateDate/' + \
                         str(lineId)
-                line_bot_api.reply_message(
-                    event.reply_token, FlexSendMessage(
-                        alt_text='搜尋結果',
-                        contents={
-                            "type": "bubble",
-                            "body": {
-                                "type": "box",
-                                "layout": "vertical",
-                                "contents": [
-                                    {
-                                        "type": "text",
-                                        "text": "求職資料登記",
-                                        "size": "lg",
-                                        "weight": "bold"
-                                    },
-                                    {
-                                        "type": "separator",
-                                        "margin": "md",
-                                        "color": "#000000"
-                                    },
-                                    {
-                                        "type": "button",
-                                        "action": {
-                                            "type": "uri",
-                                            "label": "求職資料登記",
-                                            "uri": "https://liff.line.me/1656626380-ZrL4j5xO"
+                    line_bot_api.reply_message(
+                        event.reply_token, FlexSendMessage(
+                            alt_text='搜尋結果',
+                            contents={
+                                "type": "bubble",
+                                "body": {
+                                    "type": "box",
+                                    "layout": "vertical",
+                                    "contents": [
+                                        {
+                                            "type": "text",
+                                            "text": "求職資料登記",
+                                            "size": "lg",
+                                            "weight": "bold"
                                         },
-                                        "style": "secondary",
-                                        "margin": "md"
-                                    },
-                                    {
-                                        "type": "box",
-                                        "layout": "vertical",
-                                        "contents": [
-                                            {
-                                                "type": "text",
-                                                "text": "查詢登記資料",
-                                                "size": "lg",
-                                                "weight": "bold"
+                                        {
+                                            "type": "separator",
+                                            "margin": "md",
+                                            "color": "#000000"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "action": {
+                                                "type": "uri",
+                                                "label": "求職資料登記",
+                                                "uri": "https://liff.line.me/1656626380-ZrL4j5xO"
                                             },
-                                            {
-                                                "type": "separator",
-                                                "margin": "md",
-                                                "color": "#000000"
-                                            },
-                                            {
-                                                "type": "button",
-                                                "action": {
-                                                    "type": "message",
-                                                    "label": "查詢登記資料",
-                                                    "text": "@查詢登記資料"
+                                            "style": "secondary",
+                                            "margin": "md"
+                                        },
+                                        {
+                                            "type": "box",
+                                            "layout": "vertical",
+                                            "contents": [
+                                                {
+                                                    "type": "text",
+                                                    "text": "查詢登記資料",
+                                                    "size": "lg",
+                                                    "weight": "bold"
                                                 },
-                                                "style": "secondary",
-                                                "margin": "md"
-                                            }
-                                        ],
-                                        "margin": "lg"
-                                    },
-                                    {
-                                        "type": "box",
-                                        "layout": "vertical",
-                                        "contents": [
-                                            {
-                                                "type": "text",
-                                                "text": "求職資料修改",
-                                                "size": "lg",
-                                                "weight": "bold"
-                                            },
-                                            {
-                                                "type": "separator",
-                                                "margin": "md",
-                                                "color": "#000000"
-                                            },
-                                            {
-                                                "type": "button",
-                                                "action": {
-                                                    "type": "uri",
-                                                    "label": "前往修改",
-                                                    "uri": url
+                                                {
+                                                    "type": "separator",
+                                                    "margin": "md",
+                                                    "color": "#000000"
                                                 },
-                                                "style": "secondary",
-                                                "margin": "md"
-                                            }
-                                        ],
-                                        "margin": "lg"
-                                    }
-                                ]
+                                                {
+                                                    "type": "button",
+                                                    "action": {
+                                                        "type": "message",
+                                                        "label": "查詢登記資料",
+                                                        "text": "@查詢登記資料"
+                                                    },
+                                                    "style": "secondary",
+                                                    "margin": "md"
+                                                }
+                                            ],
+                                            "margin": "lg"
+                                        },
+                                        {
+                                            "type": "box",
+                                            "layout": "vertical",
+                                            "contents": [
+                                                {
+                                                    "type": "text",
+                                                    "text": "求職資料修改",
+                                                    "size": "lg",
+                                                    "weight": "bold"
+                                                },
+                                                {
+                                                    "type": "separator",
+                                                    "margin": "md",
+                                                    "color": "#000000"
+                                                },
+                                                {
+                                                    "type": "button",
+                                                    "action": {
+                                                        "type": "uri",
+                                                        "label": "前往修改",
+                                                        "uri": url
+                                                    },
+                                                    "style": "secondary",
+                                                    "margin": "md"
+                                                }
+                                            ],
+                                            "margin": "lg"
+                                        }
+                                    ]
+                                }
+                            }))
+                else:
+                    line_bot_api.reply_message(
+                        event.reply_token, FlexSendMessage(
+                            alt_text='搜尋結果',
+                            contents={
+                                "type": "bubble",
+                                "body": {
+                                    "type": "box",
+                                    "layout": "vertical",
+                                    "contents": [
+                                        {
+                                            "type": "text",
+                                            "text": "求職資料登記",
+                                            "size": "lg",
+                                            "weight": "bold"
+                                        },
+                                        {
+                                            "type": "separator",
+                                            "margin": "md",
+                                            "color": "#000000"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "action": {
+                                                "type": "uri",
+                                                "label": "求職資料登記",
+                                                "uri": "https://liff.line.me/1656626380-ZrL4j5xO"
+                                            },
+                                            "style": "secondary",
+                                            "margin": "md"
+                                        },
+                                    ]
+                                }
                             }
-                        }))
+                        )
+                    )
+
             if msg == '@求職資料修改':
                 if job_hunting.objects.filter(lineId=lineId).exists():
                     url = 'https://joblinebotapp.herokuapp.com/updateDate/' + \
