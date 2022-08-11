@@ -63,27 +63,6 @@ def callback(request):
                                     "layout": "vertical",
                                     "contents": [
                                         {
-                                            "type": "text",
-                                            "text": "求職資料登記",
-                                            "size": "lg",
-                                            "weight": "bold"
-                                        },
-                                        {
-                                            "type": "separator",
-                                            "margin": "md",
-                                            "color": "#000000"
-                                        },
-                                        {
-                                            "type": "button",
-                                            "action": {
-                                                "type": "uri",
-                                                "label": "求職資料登記",
-                                                "uri": "https://liff.line.me/1656626380-ZrL4j5xO"
-                                            },
-                                            "style": "secondary",
-                                            "margin": "md"
-                                        },
-                                        {
                                             "type": "box",
                                             "layout": "vertical",
                                             "contents": [
