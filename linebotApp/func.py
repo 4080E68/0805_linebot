@@ -18,6 +18,8 @@ def job(event, lineId):  # 求職函式
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text=message))
     else:
+        errorMessage = ''
+        errorMessage += '查無資料' + '\n' + '請先至求職資料設定登記求職資料'
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text='查無資料'))
 
@@ -37,10 +39,10 @@ def job_register(event, msg, lineId):  # 註冊資料
             event.reply_token, TextSendMessage(text='此line帳號已有資料，請勿重複登記！'))
     else:
         user = job_hunting.objects.create(
-            name=name, minSalary=minSalary,maxSalary=maxSalary, address=address, Phone=Phone, lineId=lineid, remark=remark)
+            name=name, minSalary=minSalary, maxSalary=maxSalary, address=address, Phone=Phone, lineId=lineid, remark=remark)
         user.save()
         line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text='註冊成功！'))
+            event.reply_token, TextSendMessage(text='註冊成功！' + '\n' + '現在可以開始使用求職功能'))
 
 
 # def update_job(event, msg, lineId):  # 修改資料
