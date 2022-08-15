@@ -24,3 +24,4 @@ class company(models.Model):  # 公司
     remark = models.CharField(max_length=255, default="")  # 備註
     assistant = models.CharField(max_length=255, default="")  # 是否有助理
     overtime_pay = models.CharField(max_length=255, default="")  # 是否有加班費
+    lineId = models.CharField(max_length=255, default="")  # lineId

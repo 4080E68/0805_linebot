@@ -50,6 +50,21 @@ def callback(request):
                     errorMessage += '查無資料' + '\n' + '請先至求職資料設定登記求職資料'
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text=errorMessage))
+
+            if msg == '@查詢公司資料':
+                if company.objects.filter(lineId=lineId).exists():
+                    data = company.objects.filter(lineId=lineId)
+                    message = '姓名：' + str(data.name) + '\n' + '期望薪資：' + '時薪' + str(data.minSalary) + '~' + str(data.maxSalary) + \
+                        '\n' + '聯絡電話：' + str(data.Phone) + \
+                        '\n'+'期望工作地點：' + str(data.address) + \
+                        '\n'+'備註：' + str(data.remark)
+                    line_bot_api.reply_message(
+                        event.reply_token, TextSendMessage(text=message))
+                else:
+                    errorMessage = ''
+                    errorMessage += '查無資料' + '\n' + '請先至求才資料設定登記求職資料'
+                    line_bot_api.reply_message(
+                        event.reply_token, TextSendMessage(text=errorMessage))
             if msg[:7] == '@登記求職資料' and len(msg) > 3:
                 func.job_register(event, msg, lineId)
             if msg[:7] == '@登記求才資料' and len(msg) > 3:
@@ -58,7 +73,7 @@ def callback(request):
             #     func.update_job(event, msg, lineId)
             if msg == '@求職資料設定':
                 if job_hunting.objects.filter(lineId=lineId).exists():
-                    url = 'https://joblinebotapp.herokuapp.com/updateDate/' + \
+                    url = 'http://w1.linebot.com.tw/updateDate/' + \
                         str(lineId)
                     line_bot_api.reply_message(
                         event.reply_token, FlexSendMessage(
@@ -214,6 +229,7 @@ def callback(request):
         return HttpResponseBadRequest()
 
 
+@csrf_exempt
 def update_job(request, id):
     if job_hunting.objects.filter(lineId=id).exists():
         userData = job_hunting.objects.get(lineId=id)
@@ -237,6 +253,13 @@ def update_job(request, id):
                 job_hunting.objects.filter(lineId=id).update(
                     name=name, minSalary=minSalary, maxSalary=maxSalary, address=address, Phone=phone, remark=remark
                 )
+                userName = userData.name
+                userminSalary = userData.minSalary
+                usermaxSalary = userData.maxSalary
+                userCounty = userData.address[:3]
+                userAddress = userData.address[3:]
+                userPhone = userData.Phone
+                userRemark = userData.remark
             except:
                 message = '修改失敗！'
     return render(request, 'update_job.html', locals())
