@@ -56,11 +56,11 @@ def company_register(event, msg, lineId):  # 求才註冊資料
     remark = flist[6]
     assistant = flist[7]
     overtime_pay = flist[8]
-
-    company = job_hunting.objects.create(
+    print(flist)
+    user = company.objects.create(
         companyName=companyName, name=name, minSalary=minSalary, maxSalary=maxSalary, address=address, Phone=Phone,
         remark=remark, assistant=assistant, overtime_pay=overtime_pay, lineId=lineId)
-    company.save()
+    user.save()
     line_bot_api.reply_message(
         event.reply_token, TextSendMessage(text='註冊成功！' + '\n' + '現在可以開始使用求才功能'))
 

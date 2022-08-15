@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <title>已登記招募資料</title>
+</head>
+<body>
+    <style>
+        div.card {
+            margin: 1rem;
+        }
+    </style>
+    <div class="container">
+        <br>
+        <div class="text-center">
+            <h1>已登記招募資料</h1>
+        </div>
+        {% for i in data %}
+        <div class="card">
+            <h5 class="card-header">{{i.companyName}}</h5>
+            <div class="card-body">
+                <h5 class="card-title">聯絡人：{{i.name}}</h5>
+                <p class="card-text">公司地址：{{i.address}}</p>
+                <p class="card-text">聯絡電話：{{i.Phone}}</p>
+                <p class="card-text">聯絡電話：{{i.Phone}}</p>
+                <p class="card-text">聯絡電話：{{i.Phone}}</p>
+                <a href="#" class="btn btn-primary">聯絡對方</a>
+            </div>
+        </div>
+        {% endfor %}
+
+
+
+    </div>
+</body>
+
+
+</html>

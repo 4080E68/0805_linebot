@@ -21,5 +21,7 @@ urlpatterns = [
     re_path('^callback', views.callback),
     # re_path('updateDate/<int:id>/', views.update_job),
     re_path(r'^updateDate/(?P<id>\w+)/$', views.update_job, name='update_job'),
+    re_path(r'^selectCompany/(?P<id>\w+)/$',
+            views.selectCompany, name='selectCompany'),
     path('admin/', admin.site.urls),
 ]

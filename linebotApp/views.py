@@ -51,13 +51,33 @@ def callback(request):
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text=errorMessage))
 
-            if msg == '@查詢公司資料':
+            if msg == '@查詢已登記求才資料':
                 if company.objects.filter(lineId=lineId).exists():
                     data = company.objects.filter(lineId=lineId)
-                    message = '姓名：' + str(data.name) + '\n' + '期望薪資：' + '時薪' + str(data.minSalary) + '~' + str(data.maxSalary) + \
-                        '\n' + '聯絡電話：' + str(data.Phone) + \
-                        '\n'+'期望工作地點：' + str(data.address) + \
-                        '\n'+'備註：' + str(data.remark)
+                    message = ''
+                    count = 0
+                    print(len(data))
+                    for i in data:
+                        count += 1
+                        if count < len(data):
+                            message += '執業場所名稱：' + str(i.companyName) + \
+                                '\n' + '聯絡人：' + str(i.name) + \
+                                '\n' + '給付薪資：' + '時薪' + str(i.minSalary) + '~' + str(i.maxSalary) + \
+                                '\n' + '聯絡電話：' + str(i.Phone) + \
+                                '\n'+'期望工作地點：' + str(i.address) + \
+                                '\n'+'備註：' + str(i.remark) + \
+                                '\n'+'是否有提供助理：' + str(i.assistant) + \
+                                '\n'+'是否有提供加班費：' + str(i.overtime_pay) + '\n\n'
+                        else:
+                            message += '執業場所名稱：' + str(i.companyName) + \
+                                '\n' + '聯絡人：' + str(i.name) + \
+                                '\n' + '給付薪資：' + '時薪' + str(i.minSalary) + '~' + str(i.maxSalary) + \
+                                '\n' + '聯絡電話：' + str(i.Phone) + \
+                                '\n'+'期望工作地點：' + str(i.address) + \
+                                '\n'+'備註：' + str(i.remark) + \
+                                '\n'+'是否有提供助理：' + str(i.assistant) + \
+                                '\n'+'是否有提供加班費：' + str(i.overtime_pay)
+
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text=message))
                 else:
@@ -263,3 +283,9 @@ def update_job(request, id):
             except:
                 message = '修改失敗！'
     return render(request, 'update_job.html', locals())
+
+
+def selectCompany(request, id):
+    if company.objects.filter(lineId=id).exists():
+        data = company.objects.filter(lineId=id)
+    return render(request, 'selectCompany.html', locals())
