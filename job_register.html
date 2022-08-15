@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,6 +13,7 @@
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <title>求職資料註冊</title>
 </head>
+
 <body>
     <div class="container">
         <br>
@@ -23,28 +25,19 @@
                 <label for="name" class="form-label">姓名</label>
                 <input class="form-control" type="text" id="name" required>
             </div>
+            <p>期望薪資</p>
             <div class="row">
-                <label for="salary" class="form-label">期望薪資</label>
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon3">時薪</span>
-                    <input type="number" class="form-control" id="salary" aria-describedby="basic-addon3">
+                <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin">
                 </div>
-                <!-- <div class="col">
-                    <label for="salary" class="form-label">類別</label>
-                    <select class="form-select" id="select" required>
-                        <option value="">請選擇薪資類別</option>
-                        <option value="時薪">時薪</option>
-                        <option value="日薪">日薪</option>
-                        <option value="月薪">月薪</option>
-                    </select>
+                ~
+                <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax">
                 </div>
-                <div class="col">
-                    <label for="salary" class="form-label">期望薪資</label>
-                    <input class="form-control" type="number" id="salary" required>
-                    <input type="hidden" name="" id="salary1">
-
-                </div> -->
             </div>
+            <br>
             <div class="row">
                 <div class="mb-3">
                     <label for="County" class="form-label">請選擇求職縣市</label>
@@ -206,7 +199,8 @@
 <script>
     function push() {
         let name = document.getElementById('name').value
-        let salary = document.getElementById('salary').value
+        let Smin = document.getElementById('Smin').value
+        let Smax = document.getElementById('Smax').value
         let address = document.getElementById('address').value
         let phone = document.getElementById('phone').value
         let County_result = document.getElementById('County').value
@@ -216,13 +210,17 @@
         }
         // let select = document.getElementById('select').value
         let form = document.getElementById('form')
-        if (name == '' || salary == '' || phone == '') {
+        if (name == '' || Smin == '' || Smax == '' || phone == '') {
             return alert('請填寫所需資料！')
-        } else {
+        } else if (Smax < Smin || Smax == Smin) {
+            return alert('最高薪資不可小於或等於最低薪資!')
+        }
+        else {
             var msg = "@登記求職資料";  //回傳訊息字串
             msg = msg + name + "&";
             // msg = msg + select + salary + "&";
-            msg = msg + '時薪' + salary + "&";
+            msg = msg + Smin + "&";
+            msg = msg + Smax + "&";
             msg = msg + County_result + address + "&";
             msg = msg + phone + "&";
             msg = msg + remark;

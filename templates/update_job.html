@@ -25,14 +25,19 @@
                 <label for="name" class="form-label">姓名</label>
                 <input class="form-control" type="text" id="name" name="name" value="{{userName}}">
             </div>
+            <p>期望薪資</p>
             <div class="row">
-                <label for="salary" class="form-label">期望薪資</label>
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon3">時薪</span>
-                    <input type="number" class="form-control" id="salary" name="salary" aria-describedby="basic-addon3"
-                        value="{{userSalary}}">
+                <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin" value="{{userminSalary}}" name="minSalary">
+                </div>
+                ~
+                <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax" value="{{usermaxSalary}}" name="maxSalary">
                 </div>
             </div>
+            <br>
             <!-- <div class="row">
                 <div class="mb-3">
                     <label for="address" class="form-label">期望工作地點</label>

@@ -5,7 +5,8 @@ from django.db import models
 
 class job_hunting(models.Model):  # 求職
     name = models.CharField(max_length=255, default="")  # 聯絡人
-    salary = models.CharField(max_length=255, default="")  # 期望薪資
+    minSalary = models.CharField(max_length=255, default="")  # 期望薪資
+    maxSalary = models.CharField(max_length=255, default="")  # 期望薪資
     address = models.CharField(max_length=255, default="")  # 期望工作地點
     Phone = models.CharField(max_length=255, default="")  # 聯絡電話
     remark = models.CharField(max_length=255, default="")  # 聯絡電話

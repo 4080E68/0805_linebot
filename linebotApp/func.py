@@ -25,18 +25,19 @@ def job(event, lineId):  # 求職函式
 def job_register(event, msg, lineId):  # 註冊資料
     flist = msg[7:].split('&')
     name = flist[0]
-    salary = flist[1]
-    address = flist[2]
-    Phone = flist[3]
-    remark = flist[4]
+    minSalary = flist[1]
+    maxSalary = flist[2]
+    address = flist[3]
+    Phone = flist[4]
+    remark = flist[5]
     lineid = lineId
-    print(name, salary, address, Phone, lineid)
+    # print(name, minSalary, address, Phone, lineid)
     if job_hunting.objects.filter(lineId=lineId).exists():
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text='此line帳號已有資料，請勿重複登記！'))
     else:
         user = job_hunting.objects.create(
-            name=name, salary=salary, address=address, Phone=Phone, lineId=lineid, remark=remark)
+            name=name, minSalary=minSalary,maxSalary=maxSalary, address=address, Phone=Phone, lineId=lineid, remark=remark)
         user.save()
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text='註冊成功！'))

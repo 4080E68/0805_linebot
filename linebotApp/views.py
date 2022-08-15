@@ -39,7 +39,7 @@ def callback(request):
             if msg == '@查詢登記資料':
                 if job_hunting.objects.filter(lineId=lineId).exists():
                     data = job_hunting.objects.get(lineId=lineId)
-                    message = '姓名：' + str(data.name) + '\n' + '期望薪資：' + str(data.salary) + \
+                    message = '姓名：' + str(data.name) + '\n' + '期望薪資：' + '時薪' + str(data.minSalary) + '~' + str(data.maxSalary) + \
                         '\n' + '聯絡電話：' + str(data.Phone) + \
                         '\n'+'期望工作地點：' + str(data.address) + \
                         '\n'+'備註：' + str(data.remark)
@@ -211,24 +211,24 @@ def update_job(request, id):
     if job_hunting.objects.filter(lineId=id).exists():
         userData = job_hunting.objects.get(lineId=id)
         userName = userData.name
-        userSalary = userData.salary[2:]
-        userSalary1 = userData.salary
+        userminSalary = userData.minSalary
+        usermaxSalary = userData.maxSalary
         userCounty = userData.address[:3]
         userAddress = userData.address[3:]
         userPhone = userData.Phone
         userRemark = userData.remark
     if request.method == "POST":
         name = request.POST['name']
-        salary = '時薪'+request.POST['salary']
+        minSalary = request.POST['minSalary']
+        maxSalary = request.POST['maxSalary']
         address = request.POST['County']+request.POST['address']
         phone = request.POST['phone']
         remark = request.POST['remark']
-        print(name, salary, address, phone, remark)
 
         if job_hunting.objects.filter(lineId=id).exists():
             try:
                 job_hunting.objects.filter(lineId=id).update(
-                    name=name, salary=salary, address=address, Phone=phone, remark=remark
+                    name=name, minSalary=minSalary, maxSalary=maxSalary, address=address, Phone=phone, remark=remark
                 )
             except:
                 message = '修改失敗！'
