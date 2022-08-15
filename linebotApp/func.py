@@ -21,7 +21,7 @@ def job(event, lineId):  # 求職函式
         errorMessage = ''
         errorMessage += '查無資料' + '\n' + '請先至求職資料設定登記求職資料'
         line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text='查無資料'))
+            event.reply_token, TextSendMessage(text=errorMessage))
 
 
 def job_register(event, msg, lineId):  # 註冊資料
