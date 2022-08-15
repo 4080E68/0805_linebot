@@ -239,7 +239,8 @@
         let form = document.getElementById('form')
         if (name == '' || Smin == '' || Smax == '' || phone == '' || companyName == '') {
             return alert('請填寫所需資料！')
-        } else if (Smax < Smin || Smax == Smin) {
+        }
+        if (Smax < Smin || Smax === Smin) {
             return alert('最高薪資不可小於或等於最低薪資!')
         }
         else {
