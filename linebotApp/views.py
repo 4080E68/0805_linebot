@@ -45,8 +45,15 @@ def callback(request):
                         '\n'+'備註：' + str(data.remark)
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text=message))
+                else:
+                    errorMessage = ''
+                    errorMessage += '查無資料' + '\n' + '請先至求職資料設定登記求職資料'
+                    line_bot_api.reply_message(
+                        event.reply_token, TextSendMessage(text=errorMessage))
             if msg[:7] == '@登記求職資料' and len(msg) > 3:
                 func.job_register(event, msg, lineId)
+            if msg[:7] == '@登記求才資料' and len(msg) > 3:
+                func.company_register(event, msg, lineId)
             # if msg[:7] == '@確認修改資料' and len(msg) > 3:
             #     func.update_job(event, msg, lineId)
             if msg == '@求職資料設定':
