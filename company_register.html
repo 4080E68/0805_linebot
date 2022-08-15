@@ -240,9 +240,6 @@
         if (name == '' || Smin == '' || Smax == '' || phone == '' || companyName == '') {
             return alert('請填寫所需資料！')
         }
-        if (Smax < Smin || Smax === Smin) {
-            return alert('最高薪資不可小於或等於最低薪資!')
-        }
         else {
             var msg = "@登記求才資料";  //回傳訊息字串
             msg = msg + companyName + "&";
