@@ -1,3 +1,4 @@
+from ast import Delete
 from cmath import log
 from django.shortcuts import render
 from linebot import LineBotApi, WebhookParser
@@ -51,35 +52,66 @@ def callback(request):
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text=errorMessage))
 
-            if msg == '@查詢已登記求才資料':
+            if msg == '@求才資料設定':
                 if company.objects.filter(lineId=lineId).exists():
-                    data = company.objects.filter(lineId=lineId)
-                    message = ''
-                    count = 0
-                    print(len(data))
-                    for i in data:
-                        count += 1
-                        if count < len(data):
-                            message += '執業場所名稱：' + str(i.companyName) + \
-                                '\n' + '聯絡人：' + str(i.name) + \
-                                '\n' + '給付薪資：' + '時薪' + str(i.minSalary) + '~' + str(i.maxSalary) + \
-                                '\n' + '聯絡電話：' + str(i.Phone) + \
-                                '\n'+'期望工作地點：' + str(i.address) + \
-                                '\n'+'備註：' + str(i.remark) + \
-                                '\n'+'是否有提供助理：' + str(i.assistant) + \
-                                '\n'+'是否有提供加班費：' + str(i.overtime_pay) + '\n\n'
-                        else:
-                            message += '執業場所名稱：' + str(i.companyName) + \
-                                '\n' + '聯絡人：' + str(i.name) + \
-                                '\n' + '給付薪資：' + '時薪' + str(i.minSalary) + '~' + str(i.maxSalary) + \
-                                '\n' + '聯絡電話：' + str(i.Phone) + \
-                                '\n'+'期望工作地點：' + str(i.address) + \
-                                '\n'+'備註：' + str(i.remark) + \
-                                '\n'+'是否有提供助理：' + str(i.assistant) + \
-                                '\n'+'是否有提供加班費：' + str(i.overtime_pay)
-
+                    url = 'http://127.0.0.1:8000/selectCompany/%s'%lineId
                     line_bot_api.reply_message(
-                        event.reply_token, TextSendMessage(text=message))
+                        event.reply_token, FlexSendMessage(
+                            alt_text='搜尋結果',
+                            contents={
+                                "type": "bubble",
+                                "body": {
+                                    "type": "box",
+                                    "layout": "vertical",
+                                    "contents": [
+                                        {
+                                            "type": "text",
+                                            "text": "登記求才資料",
+                                            "size": "lg",
+                                            "weight": "bold"
+                                        },
+                                        {
+                                            "type": "separator",
+                                            "margin": "md",
+                                            "color": "#000000"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "action": {
+                                                "type": "uri",
+                                                "label": "前往登記",
+                                                "uri": 'https://liff.line.me/1656626380-YA6qXpd1'
+                                            },
+                                            "style": "primary",
+                                            "margin": "md"
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": "查看求才資料",
+                                            "size": "lg",
+                                            "margin": "md",
+                                            "weight": "bold"
+                                        },
+                                        {
+                                            "type": "separator",
+                                            "margin": "md",
+                                            "color": "#000000"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "action": {
+                                                "type": "uri",
+                                                "label": "前往查看",
+                                                "uri": url
+                                            },
+                                            "style": "secondary",
+                                            "margin": "md"
+                                        },
+                                    ]
+                                }
+                            }
+                        )
+                    )
                 else:
                     errorMessage = ''
                     errorMessage += '查無資料' + '\n' + '請先至求才資料設定登記求職資料'
@@ -287,5 +319,55 @@ def update_job(request, id):
 
 def selectCompany(request, id):
     if company.objects.filter(lineId=id).exists():
-        data = company.objects.filter(lineId=id)
+        data = company.objects.filter(lineId=id)  # 搜尋所有資料
+    if request.method == "POST":
+        id = request.POST['del']
+        print(id)
+        if(id == 'NO'):
+            pass
+        else:
+            if company.objects.filter(id=id).exists():
+                delData = company.objects.get(id=id)
+                delData.delete()
     return render(request, 'selectCompany.html', locals())
+
+
+def update_Company(request, lineId, id):
+    if company.objects.filter(id=id).exists() and company.objects.filter(lineId=lineId).exists():
+        data = company.objects.get(id=id)  # 搜尋所有資料
+        dataCounty = data.address[:3]
+        dataAddress = data.address[3:]
+    if request.method == "POST":
+        companyName = request.POST['companyName']
+        name = request.POST['name']
+        minSalary = request.POST['Smin']
+        maxSalary = request.POST['Smax']
+        address = request.POST['County']+request.POST['address']
+        phone = request.POST['phone']
+        remark = request.POST['remark']
+        assistant = request.POST.get('assistant')
+        overtime_pay = request.POST.get('overtime_pay')
+        if assistant == 'on':
+            assistant = '是'
+        else:
+            assistant = '否'
+        if overtime_pay == 'on':
+            overtime_pay = '是'
+        else:
+            overtime_pay = '否'
+        print(companyName, name, minSalary, maxSalary,
+              address, phone, remark, assistant, overtime_pay)
+        if company.objects.filter(id=id).exists():
+                try:
+                    company.objects.filter(id=id).update(
+                        companyName=companyName, name=name, 
+                        minSalary=minSalary, maxSalary=maxSalary, 
+                        address=address, Phone=phone, remark=remark,
+                        assistant=assistant,overtime_pay=overtime_pay
+                    )
+                    data = company.objects.get(id=id)  # 搜尋所有資料
+                    dataCounty = data.address[:3]
+                    dataAddress = data.address[3:]
+                except:
+                    print('修改失敗!')
+    return render(request, 'updateCompany.html', locals())

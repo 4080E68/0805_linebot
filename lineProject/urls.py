@@ -23,5 +23,7 @@ urlpatterns = [
     re_path(r'^updateDate/(?P<id>\w+)/$', views.update_job, name='update_job'),
     re_path(r'^selectCompany/(?P<id>\w+)/$',
             views.selectCompany, name='selectCompany'),
+    re_path(r'^updateCompany/(?P<lineId>\w+)/(?P<id>\w+)/$',
+            views.update_Company, name='update_Company'),
     path('admin/', admin.site.urls),
 ]

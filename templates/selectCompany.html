@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,10 +13,15 @@
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <title>已登記招募資料</title>
 </head>
+
 <body>
     <style>
         div.card {
             margin: 1rem;
+        }
+
+        p {
+            margin-bottom: 0.25rem;
         }
     </style>
     <div class="container">
@@ -28,19 +34,41 @@
             <h5 class="card-header">{{i.companyName}}</h5>
             <div class="card-body">
                 <h5 class="card-title">聯絡人：{{i.name}}</h5>
+                <p class="card-text">提供薪資：{{i.minSalary}}~{{i.maxSalary}}</p>
                 <p class="card-text">公司地址：{{i.address}}</p>
                 <p class="card-text">聯絡電話：{{i.Phone}}</p>
-                <p class="card-text">聯絡電話：{{i.Phone}}</p>
-                <p class="card-text">聯絡電話：{{i.Phone}}</p>
-                <a href="#" class="btn btn-primary">聯絡對方</a>
+                <div class="row" style="margin-bottom: 0.5rem;">
+                    <div class="col-5">
+                        <p class="card-text">提供助理：{{i.assistant}}</p>
+                    </div>
+                    <div class="col-6">
+                        <p class="card-text">提供加班費：{{i.overtime_pay}}</p>
+                    </div>
+                </div>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <a href="http://127.0.0.1:8000/updateCompany/{{i.lineId}}/{{i.id}}/" class="btn btn-primary">修改</a>
+                    <button type="submit" class="btn btn-danger" id="dataID" name="del" value="{{i.id}}"
+                        onclick="test(this.value,this.id)">刪除</button>
+                </form>
             </div>
         </div>
         {% endfor %}
-
-
-
     </div>
-</body>
+    <script>
+        function test(value, id) {
+            console.log(value);
+            var question = confirm('是否刪除該筆資料?');
+            if (question) {
+                alert('已刪除!')
+            } else {
+                document.getElementById(id).value = 'NO'
+                alert('已取消!')
+            }
 
+
+        }
+    </script>
+</body>
 
 </html>
