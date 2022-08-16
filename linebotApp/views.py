@@ -54,7 +54,7 @@ def callback(request):
 
             if msg == '@求才資料設定':
                 if company.objects.filter(lineId=lineId).exists():
-                    url = 'http://127.0.0.1:8000/selectCompany/%s'%lineId
+                    url = 'https://w1.linebot.com.tw/selectCompany/%s'%lineId
                     line_bot_api.reply_message(
                         event.reply_token, FlexSendMessage(
                             alt_text='搜尋結果',
@@ -316,7 +316,7 @@ def update_job(request, id):
                 message = '修改失敗！'
     return render(request, 'update_job.html', locals())
 
-
+@csrf_exempt
 def selectCompany(request, id):
     if company.objects.filter(lineId=id).exists():
         data = company.objects.filter(lineId=id)  # 搜尋所有資料
@@ -331,7 +331,7 @@ def selectCompany(request, id):
                 delData.delete()
     return render(request, 'selectCompany.html', locals())
 
-
+@csrf_exempt
 def update_Company(request, lineId, id):
     if company.objects.filter(id=id).exists() and company.objects.filter(lineId=lineId).exists():
         data = company.objects.get(id=id)  # 搜尋所有資料
