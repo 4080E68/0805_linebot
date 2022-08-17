@@ -64,6 +64,61 @@ def company_register(event, msg, lineId):  # 求才註冊資料
     line_bot_api.reply_message(
         event.reply_token, TextSendMessage(text='註冊成功！' + '\n' + '現在可以開始使用求才功能'))
 
+def select_job(event, msg):
+    flist = msg[5:].split('&')
+    Smin = flist[0]
+    Smax = flist[1]
+    address = flist[2]
+    assistant = flist[3]
+    overtime_pay = flist[4]
+    if(assistant == 'true'):
+        assistant = '是'
+    else:
+        assistant = '否'
+    if(overtime_pay == 'true'):
+        overtime_pay = '是'
+    else:
+        overtime_pay = '否'
+    if address[3:] == '不拘':
+        address = address[:3] + '%'
+        result = company.objects.raw(
+            "select * from linebotApp_company where minSalary >= %s and maxSalary<=%s and address like %s \
+                and assistant=%s and overtime_pay=%s"        
+                ,[Smin,Smax,address,assistant,overtime_pay])
+    else:
+        result = company.objects.raw(
+            "select * from linebotApp_company where minSalary >= %s and maxSalary<=%s and address=%s \
+                and assistant=%s and overtime_pay=%s"        
+                ,[Smin,Smax,address,assistant,overtime_pay])
+    print(result)
+    message = ''
+    count = 0
+    if(len(result)==0):
+        message = '查無資料！'
+    else:
+        for i in result:
+            count+=1
+            if(count != len(result)):
+                message += '執業場所名稱：' + str(i.companyName) +'\n' \
+                    '聯絡人：' + str(i.name) +'\n'\
+                    '提供薪資：' + str(i.minSalary)+'~'+ str(i.maxSalary) + '\n'\
+                    '聯絡電話：' + str(i.Phone) +'\n'\
+                    '工作地點：' + str(i.address) +'\n'\
+                    '備註：' + str(i.remark) +'\n'\
+                    '是否有提供助理：' + str(i.assistant) +'\n'\
+                    '是否有提供加班費：' + str(i.overtime_pay) + '\n\n'
+            else:
+                message += '執業場所名稱：' + str(i.companyName) +'\n' \
+                    '聯絡人：' + str(i.name) +'\n'\
+                    '提供薪資：' + str(i.minSalary)+'~'+ str(i.maxSalary) + '\n'\
+                    '聯絡電話：' + str(i.Phone) +'\n'\
+                    '工作地點：' + str(i.address) +'\n'\
+                    '備註：' + str(i.remark) +'\n'\
+                    '是否有提供助理：' + str(i.assistant) +'\n'\
+                    '是否有提供加班費：' + str(i.overtime_pay)
+    line_bot_api.reply_message(
+             event.reply_token, TextSendMessage(message))
+    
 # def update_job(event, msg, lineId):  # 修改資料
 #     flist = msg[7:].split('&')
 #     name = flist[0]

@@ -35,8 +35,8 @@ def callback(request):
             if isinstance(event, MessageEvent):  # 如果有訊息事件
                 msg = event.message.text
                 lineId = events[0].source.user_id
-            if msg == '@我要求職':
-                func.job(event, lineId)
+            if msg[:5] == '@搜尋求職' and len(msg) > 3:
+                func.select_job(event, msg)
             if msg == '@查詢登記資料':
                 if job_hunting.objects.filter(lineId=lineId).exists():
                     data = job_hunting.objects.get(lineId=lineId)
@@ -54,7 +54,7 @@ def callback(request):
 
             if msg == '@求才資料設定':
                 if company.objects.filter(lineId=lineId).exists():
-                    url = 'https://w1.linebot.com.tw/selectCompany/%s'%lineId
+                    url = 'https://w1.linebot.com.tw/selectCompany/%s' % lineId
                     line_bot_api.reply_message(
                         event.reply_token, FlexSendMessage(
                             alt_text='搜尋結果',
@@ -115,8 +115,45 @@ def callback(request):
                 else:
                     errorMessage = ''
                     errorMessage += '查無資料' + '\n' + '請先至求才資料設定登記求職資料'
+                    message = []
+
+                    message.append(TextSendMessage(text=errorMessage))
+                    message.append(FlexSendMessage(
+                        alt_text='搜尋結果',
+                        contents={
+                            "type": "bubble",
+                            "body": {
+                                    "type": "box",
+                                    "layout": "vertical",
+                                    "contents": [
+                                        {
+                                            "type": "text",
+                                            "text": "登記求才資料",
+                                            "size": "lg",
+                                            "weight": "bold"
+                                        },
+                                        {
+                                            "type": "separator",
+                                            "margin": "md",
+                                            "color": "#000000"
+                                        },
+                                        {
+                                            "type": "button",
+                                            "action": {
+                                                "type": "uri",
+                                                "label": "前往登記",
+                                                "uri": 'https://liff.line.me/1656626380-YA6qXpd1'
+                                            },
+                                            "style": "primary",
+                                            "margin": "md"
+                                        },
+                                    ]
+                            }
+                        }
+                    )
+                    )
                     line_bot_api.reply_message(
-                        event.reply_token, TextSendMessage(text=errorMessage))
+                        event.reply_token, message)
             if msg[:7] == '@登記求職資料' and len(msg) > 3:
                 func.job_register(event, msg, lineId)
             if msg[:7] == '@登記求才資料' and len(msg) > 3:
@@ -316,6 +353,7 @@ def update_job(request, id):
                 message = '修改失敗！'
     return render(request, 'update_job.html', locals())
 
+
 @csrf_exempt
 def selectCompany(request, id):
     if company.objects.filter(lineId=id).exists():
@@ -330,6 +368,7 @@ def selectCompany(request, id):
                 delData = company.objects.get(id=id)
                 delData.delete()
     return render(request, 'selectCompany.html', locals())
+
 
 @csrf_exempt
 def update_Company(request, lineId, id):
@@ -358,16 +397,16 @@ def update_Company(request, lineId, id):
         print(companyName, name, minSalary, maxSalary,
               address, phone, remark, assistant, overtime_pay)
         if company.objects.filter(id=id).exists():
-                try:
-                    company.objects.filter(id=id).update(
-                        companyName=companyName, name=name, 
-                        minSalary=minSalary, maxSalary=maxSalary, 
-                        address=address, Phone=phone, remark=remark,
-                        assistant=assistant,overtime_pay=overtime_pay
-                    )
-                    data = company.objects.get(id=id)  # 搜尋所有資料
-                    dataCounty = data.address[:3]
-                    dataAddress = data.address[3:]
-                except:
-                    print('修改失敗!')
+            try:
+                company.objects.filter(id=id).update(
+                    companyName=companyName, name=name,
+                    minSalary=minSalary, maxSalary=maxSalary,
+                    address=address, Phone=phone, remark=remark,
+                    assistant=assistant, overtime_pay=overtime_pay
+                )
+                data = company.objects.get(id=id)  # 搜尋所有資料
+                dataCounty = data.address[:3]
+                dataAddress = data.address[3:]
+            except:
+                print('修改失敗!')
     return render(request, 'updateCompany.html', locals())
