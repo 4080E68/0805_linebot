@@ -37,6 +37,8 @@ def callback(request):
                 lineId = events[0].source.user_id
             if msg[:5] == '@搜尋求職' and len(msg) > 3:
                 func.select_job(event, msg)
+            if msg[:5] == '@搜尋求才' and len(msg) > 3:
+                func.select_staff(event, msg)
             if msg == '@查詢登記資料':
                 if job_hunting.objects.filter(lineId=lineId).exists():
                     data = job_hunting.objects.get(lineId=lineId)

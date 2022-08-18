@@ -11,17 +11,17 @@
         integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
         crossorigin="anonymous"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-    <title>搜尋職缺</title>
+    <title>搜尋求職者</title>
 </head>
 
 <body>
     <div class="container">
         <br>
         <div class="text-center">
-            <h1>搜尋職缺</h1>
+            <h1>搜尋求職者</h1>
         </div>
         <form id="form">
-            <p>期望薪資</p>
+            <label for="Smin" class="form-label">期望薪資</label>
             <div class="row">
                 <div class="col input-group">
                     <span class="input-group-text">時薪</span>
@@ -36,33 +36,19 @@
             <br>
             <div class="row">
                 <div class="mb-3">
-                    <label for="County" class="form-label">請選擇求職縣市</label>
+                    <label for="County" class="form-label">請選擇縣市</label>
                     <select class="form-select" id="County" required></select>
                     <br>
-                    <label for="address" class="form-label">請選擇求職地區</label>
+                    <label for="address" class="form-label">請選擇地區</label>
                     <select class="form-select" id="address" required>
                         <option value="不拘">不拘</option>
                     </select>
                 </div>
             </div>
-            <div class="row">
-                <div class="col">
-                    <input class="form-check-input" type="checkbox" value="" id="assistant" checked>
-                    <label class="form-check-label" for="assistant">
-                        是否有提供助理
-                    </label>
-                </div>
-                <div class="col">
-                    <input class="form-check-input" type="checkbox" value="" id="overtime_pay" checked>
-                    <label class="form-check-label" for="overtime_pay">
-                        是否有提供加班費
-                    </label>
-                </div>
-            </div>
-            <br>
+
 
             <div class="d-grid gap-2">
-                <button class="btn btn-success" type="button" onclick="push()">送出</button>
+                <button class="btn btn-primary" type="button" onclick="push()">送出</button>
             </div>
         </form>
     </div>
@@ -178,18 +164,15 @@
         let Smax = document.getElementById('Smax').value
         let address = document.getElementById('address').value
         let County_result = document.getElementById('County').value
-        let assistant = document.getElementById('assistant').checked
-        let overtime_pay = document.getElementById('overtime_pay').checked
         if (Smin == '' || Smax == '') {
             return alert('請填寫薪資！')
         } 
         else {
-            var msg = "@搜尋求職";  //回傳訊息字串
+            var msg = "@搜尋求才";  //回傳訊息字串
             msg = msg + Smin + "&";
             msg = msg + Smax + "&";
-            msg = msg + County_result + address + "&";
-            msg = msg + assistant + "&";
-            msg = msg + overtime_pay
+            msg = msg + County_result + address;
+         
             
             console.log(msg);
 
