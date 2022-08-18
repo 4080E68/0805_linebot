@@ -5,6 +5,7 @@ from linebot.models import DatetimePickerTemplateAction, LocationSendMessage, Me
 import datetime
 import requests
 from urllib.request import urlretrieve
+from django.db import connection
 
 
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
@@ -57,6 +58,7 @@ def company_register(event, msg, lineId):  # 求才註冊資料
     assistant = flist[7]
     overtime_pay = flist[8]
     print(flist)
+    
     user = company.objects.create(
         companyName=companyName, name=name, minSalary=minSalary, maxSalary=maxSalary, address=address, Phone=Phone,
         remark=remark, assistant=assistant, overtime_pay=overtime_pay, lineId=lineId)
@@ -71,6 +73,9 @@ def select_job(event, msg):
     address = flist[2]
     assistant = flist[3]
     overtime_pay = flist[4]
+    cursor = connection.cursor()
+    sql = overtime_pay[4:]
+    cursor.execute(sql)
     if(assistant == 'true'):
         assistant = '是'
     else:
@@ -116,6 +121,7 @@ def select_job(event, msg):
                     '備註：' + str(i.remark) +'\n'\
                     '是否有提供助理：' + str(i.assistant) +'\n'\
                     '是否有提供加班費：' + str(i.overtime_pay)
+ 
     line_bot_api.reply_message(
              event.reply_token, TextSendMessage(message))
 
