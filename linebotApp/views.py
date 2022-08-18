@@ -362,7 +362,6 @@ def selectCompany(request, id):
         data = company.objects.filter(lineId=id)  # 搜尋所有資料
     if request.method == "POST":
         id = request.POST['del']
-        print(id)
         if(id == 'NO'):
             pass
         else:
