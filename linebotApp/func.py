@@ -38,18 +38,14 @@ def job_register(event, msg, lineId):  # 註冊資料
     job_title2 = flist[8]
     lineid = lineId
 
-    if job_hunting.objects.filter(lineId=lineId).exists():
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text='此line帳號已有資料，請勿重複登記！'))
-    else:
-        user = job_hunting.objects.create(
-            name=name, minSalary=minSalary,
-            maxSalary=maxSalary, address=address,
-            Phone=Phone, lineId=lineId, remark=remark, job_type=job_type,
-            job_title=job_title, job_title2=job_title2)
-        user.save()
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text='註冊成功！' + '\n' + '現在可以開始使用求職功能'))
+    user = job_hunting.objects.create(
+        name=name, minSalary=minSalary,
+        maxSalary=maxSalary, address=address,
+        Phone=Phone, lineId=lineId, remark=remark, job_type=job_type,
+        job_title=job_title, job_title2=job_title2)
+    user.save()
+    line_bot_api.reply_message(
+        event.reply_token, TextSendMessage(text='註冊成功！' + '\n' + '現在可以開始使用求職功能'))
 
 
 def company_register(event, msg, lineId):  # 求才註冊資料

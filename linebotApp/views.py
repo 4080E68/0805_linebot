@@ -41,31 +41,61 @@ def callback(request):
                 func.select_staff(event, msg)
             if msg == '@查詢登記資料':
                 if job_hunting.objects.filter(lineId=lineId).exists():
-                    data = job_hunting.objects.get(lineId=lineId)
-                    if(data.job_type == '全職'):
-                        if(data.job_title == 'true'):
-                            data.job_title = '是'
+                    data = job_hunting.objects.filter(lineId=lineId)
+                    message = ''
+                    count = 0
+                    for i in data:
+                        count += 1
+                        if(count < len(data)):
+                            if(i.job_type == '全職'):
+                                if(i.job_title == 'true'):
+                                    i.job_title = '是'
+                                else:
+                                    i.job_title = '否'
+                                if(i.job_title2 == 'true'):
+                                    i.job_title2 = '是'
+                                else:
+                                    i.job_title2 = '否'
+                                message += '姓名：' + str(i.name) + \
+                                    '\n'+'工作種類：' + str(i.job_type) + \
+                                    '\n' + '期望薪資：' + '月薪' + str(i.minSalary) + '~' + str(i.maxSalary) + \
+                                    '\n' + '聯絡電話：' + str(i.Phone) + \
+                                    '\n'+'期望工作地點：' + str(i.address) + \
+                                    '\n'+'備註：' + str(i.remark) + \
+                                    '\n'+'擔任負責人：' + str(i.job_title) + \
+                                    '\n'+'擔任非負責人：' + str(i.job_title2) + '\n\n'
+                            else:
+                                message += '姓名：' + str(i.name) + \
+                                    '\n'+'工作種類：' + str(i.job_type) + \
+                                    '\n' + '期望薪資：' + '時薪' + str(i.minSalary) + '~' + str(i.maxSalary) + \
+                                    '\n' + '聯絡電話：' + str(i.Phone) + \
+                                    '\n'+'期望工作地點：' + str(i.address) + \
+                                    '\n'+'備註：' + str(i.remark) + '\n\n'
                         else:
-                            data.job_title = '否'
-                        if(data.job_title2 == 'true'):
-                            data.job_title2 = '是'
-                        else:
-                            data.job_title2 = '否'
-                        message = '姓名：' + str(data.name) + \
-                            '\n'+'工作種類：' + str(data.job_type) + \
-                            '\n' + '期望薪資：' + '月薪' + str(data.minSalary) + '~' + str(data.maxSalary) + \
-                            '\n' + '聯絡電話：' + str(data.Phone) + \
-                            '\n'+'期望工作地點：' + str(data.address) + \
-                            '\n'+'備註：' + str(data.remark) + \
-                            '\n'+'擔任負責人：' + str(data.job_title) + \
-                            '\n'+'擔任非負責人：' + str(data.job_title2)
-                    else:
-                        message = '姓名：' + str(data.name) + \
-                            '\n'+'工作種類：' + str(data.job_type) + \
-                            '\n' + '期望薪資：' + '時薪' + str(data.minSalary) + '~' + str(data.maxSalary) + \
-                            '\n' + '聯絡電話：' + str(data.Phone) + \
-                            '\n'+'期望工作地點：' + str(data.address) + \
-                            '\n'+'備註：' + str(data.remark)
+                            if(i.job_type == '全職'):
+                                if(i.job_title == 'true'):
+                                    i.job_title = '是'
+                                else:
+                                    i.job_title = '否'
+                                if(i.job_title2 == 'true'):
+                                    i.job_title2 = '是'
+                                else:
+                                    i.job_title2 = '否'
+                                message += '姓名：' + str(i.name) + \
+                                    '\n'+'工作種類：' + str(i.job_type) + \
+                                    '\n' + '期望薪資：' + '月薪' + str(i.minSalary) + '~' + str(i.maxSalary) + \
+                                    '\n' + '聯絡電話：' + str(i.Phone) + \
+                                    '\n'+'期望工作地點：' + str(i.address) + \
+                                    '\n'+'備註：' + str(i.remark) + \
+                                    '\n'+'擔任負責人：' + str(i.job_title) + \
+                                    '\n'+'擔任非負責人：' + str(i.job_title2)
+                            else:
+                                message += '姓名：' + str(i.name) + \
+                                    '\n'+'工作種類：' + str(i.job_type) + \
+                                    '\n' + '期望薪資：' + '時薪' + str(i.minSalary) + '~' + str(i.maxSalary) + \
+                                    '\n' + '聯絡電話：' + str(i.Phone) + \
+                                    '\n'+'期望工作地點：' + str(i.address) + \
+                                    '\n'+'備註：' + str(i.remark)
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text=message))
                 else:
@@ -180,7 +210,7 @@ def callback(request):
                 func.job_register(event, msg, lineId)
             if msg[:7] == '@登記求才資料' and len(msg) > 3:
                 func.company_register(event, msg, lineId)
-            if msg == '@求職資料設定': 
+            if msg == '@求職資料設定':
                 if job_hunting.objects.filter(lineId=lineId).exists():
                     url = 'http://w1.linebot.com.tw/updateDate/' + \
                         str(lineId)
