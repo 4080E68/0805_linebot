@@ -42,10 +42,30 @@ def callback(request):
             if msg == '@查詢登記資料':
                 if job_hunting.objects.filter(lineId=lineId).exists():
                     data = job_hunting.objects.get(lineId=lineId)
-                    message = '姓名：' + str(data.name) + '\n' + '期望薪資：' + '時薪' + str(data.minSalary) + '~' + str(data.maxSalary) + \
-                        '\n' + '聯絡電話：' + str(data.Phone) + \
-                        '\n'+'期望工作地點：' + str(data.address) + \
-                        '\n'+'備註：' + str(data.remark)
+                    if(data.job_type == '全職'):
+                        if(data.job_title == 'true'):
+                            data.job_title = '是'
+                        else:
+                            data.job_title = '否'
+                        if(data.job_title2 == 'true'):
+                            data.job_title2 = '是'
+                        else:
+                            data.job_title2 = '否'
+                        message = '姓名：' + str(data.name) + \
+                            '\n'+'工作種類：' + str(data.job_type) + \
+                            '\n' + '期望薪資：' + '月薪' + str(data.minSalary) + '~' + str(data.maxSalary) + \
+                            '\n' + '聯絡電話：' + str(data.Phone) + \
+                            '\n'+'期望工作地點：' + str(data.address) + \
+                            '\n'+'備註：' + str(data.remark) + \
+                            '\n'+'擔任負責人：' + str(data.job_title) + \
+                            '\n'+'擔任非負責人：' + str(data.job_title2)
+                    else:
+                        message = '姓名：' + str(data.name) + \
+                            '\n'+'工作種類：' + str(data.job_type) + \
+                            '\n' + '期望薪資：' + '時薪' + str(data.minSalary) + '~' + str(data.maxSalary) + \
+                            '\n' + '聯絡電話：' + str(data.Phone) + \
+                            '\n'+'期望工作地點：' + str(data.address) + \
+                            '\n'+'備註：' + str(data.remark)
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text=message))
                 else:
@@ -160,9 +180,7 @@ def callback(request):
                 func.job_register(event, msg, lineId)
             if msg[:7] == '@登記求才資料' and len(msg) > 3:
                 func.company_register(event, msg, lineId)
-            # if msg[:7] == '@確認修改資料' and len(msg) > 3:
-            #     func.update_job(event, msg, lineId)
-            if msg == '@求職資料設定':
+            if msg == '@求職資料設定': 
                 if job_hunting.objects.filter(lineId=lineId).exists():
                     url = 'http://w1.linebot.com.tw/updateDate/' + \
                         str(lineId)
