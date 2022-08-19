@@ -25,8 +25,16 @@
                 <label for="name" class="form-label">姓名</label>
                 <input class="form-control" type="text" id="name" required>
             </div>
+            <label for="job_type" class="form-label">工作種類</label>
+            <select class="form-select" aria-label="Default select example" id="job_type">
+                <option value="支援">支援</option>
+                <option value="全職">全職</option>
+            </select>
+            <br>
+
+
             <p>期望薪資</p>
-            <div class="row">
+            <div class="row" id="Srow">
                 <div class="col input-group">
                     <span class="input-group-text">時薪</span>
                     <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin">
@@ -37,10 +45,9 @@
                     <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax">
                 </div>
             </div>
-            <br>
             <div class="row">
                 <div class="mb-3">
-                    <label for="County" class="form-label">請選擇求職縣市</label>
+                    <label for="County" class="form-label" style="margin-top: 0.5rem;">請選擇求職縣市</label>
                     <select class="form-select" id="County" required></select>
                     <br>
                     <label for="address" class="form-label">請選擇求職地區</label>
@@ -59,6 +66,8 @@
                     style="height: 100px"></textarea>
                 <label for="floatingTextarea2">備註</label>
             </div>
+            <br>
+
             <br>
 
             <div class="d-grid gap-2">
@@ -141,6 +150,55 @@
     let area = Object.values(area_data)
     let County = document.getElementById('County')
     let address = document.getElementById('address');
+    let job_type = document.getElementById('job_type')
+    let Srow = document.getElementById('Srow')
+    let jobTitle = document.getElementById('jobTitle')
+    job_type.addEventListener('change', () => {
+        if (job_type.value == '全職') {
+            Srow.innerHTML = ''
+            Srow.innerHTML = `
+            <div class="row" id="Srow2">
+                    <div class="col input-group">
+                        <span class="input-group-text">月薪</span>
+                        <input type="number" class="form-control" placeholder="最低薪資" aria-label="First name" id="Smin">
+                    </div>
+                    ~
+                    <div class="col input-group">
+                        <span class="input-group-text">月薪</span>
+                        <input type="number" class="form-control" placeholder="最高薪資" aria-label="Last name" id="Smax">
+                    </div>
+            </div>
+            <div class="row" id="jobTitle" style="margin-bottom: 1rem; margin-top: 1rem;">
+                <label class="form-label">可擔任職務</label>
+                <div class="col">
+                    <input class="form-check-input" type="checkbox" value="" id="job_title">
+                    <label class="form-check-label" for="job_title">
+                        負責人
+                    </label>
+                </div>
+                <div class="col">
+                    <input class="form-check-input" type="checkbox" value="" id="job_title2">
+                    <label class="form-check-label" for="job_title2">
+                        非負責人
+                    </label>
+                </div>
+            </div>
+            `
+        } else {
+            Srow.innerHTML = ''
+            Srow.innerHTML = `
+            <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin">
+                </div>
+                ~
+                <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax">
+                </div>
+            `
+        }
+    })
 
     County_data.forEach((e, index) => {
         County.options[County.options.length] = new Option(e, e);
@@ -174,18 +232,10 @@
                     } else {
                         element.行政區 = element.行政區.substr(0, 6)
                     }
-                    // address.options[address.options.length] = new Option(element.行政區, element.行政區);
                 }
             });
         });
-    // fetch("https://api.nlsc.gov.tw/other/ListCounty")
-    //     .then(response => response.text())
-    //     .then(data => {
-    //         const parser = new DOMParser();
-    //         const xml = parser.parseFromString(data, "application/xml");
-    //         console.log(xml);
-    //     })
-    //     .catch(console.error);
+
     liff
         .init({
             liffId: "1656626380-ZrL4j5xO", // Use own liffId
@@ -205,6 +255,18 @@
         let phone = document.getElementById('phone').value
         let County_result = document.getElementById('County').value
         let remark = document.getElementById('floatingTextarea2').value
+        let job_type = document.getElementById('job_type').value
+        let job_title = document.getElementById('job_title')
+        let job_title2 = document.getElementById('job_title2')
+
+        if (!job_title) {
+            var job_title_final = false
+            var job_title2_final = false
+        } else {
+            var job_title_final = document.getElementById('job_title').checked
+            var job_title2_final = document.getElementById('job_title2').checked
+        }
+
         if (remark == '') {
             remark = '無'
         }
@@ -212,8 +274,6 @@
         let form = document.getElementById('form')
         if (name == '' || Smin == '' || Smax == '' || phone == '') {
             return alert('請填寫所需資料！')
-        } else if (Smax < Smin || Smax == Smin) {
-            return alert('最高薪資不可小於或等於最低薪資!')
         }
         else {
             var msg = "@登記求職資料";  //回傳訊息字串
@@ -223,7 +283,10 @@
             msg = msg + Smax + "&";
             msg = msg + County_result + address + "&";
             msg = msg + phone + "&";
-            msg = msg + remark;
+            msg = msg + remark + "&";
+            msg = msg + job_type + "&";
+            msg = msg + job_title_final + "&";
+            msg = msg + job_title2_final
             console.log(msg);
 
             liff.sendMessages([  //推播訊息
