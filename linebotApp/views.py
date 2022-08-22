@@ -212,7 +212,7 @@ def callback(request):
                 func.company_register(event, msg, lineId)
             if msg == '@求職資料設定':
                 if job_hunting.objects.filter(lineId=lineId).exists():
-                    url = 'https://w1.linebot.com.tw/update_job/' + \
+                    url = 'https://w1.linebot.com.tw/select_job/' + \
                         str(lineId)
                     line_bot_api.reply_message(
                         event.reply_token, FlexSendMessage(
