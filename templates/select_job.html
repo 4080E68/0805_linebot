@@ -30,47 +30,47 @@
             <h1>已登記求職資料</h1>
         </div>
         {% for i in data %}
-            {% if i.job_type == '全職' %}
-                <div class="card">
-                    <h5 class="card-header">{{i.job_type}}</h5>
-                    <div class="card-body">
-                        <h5 class="card-title">姓名：{{i.name}}</h5>
-                        <p class="card-text">期望薪資：{{i.minSalary}}~{{i.maxSalary}}</p>
-                        <p class="card-text">期望工作地點：{{i.address}}</p>
-                        <p class="card-text">聯絡電話：{{i.Phone}}</p>
-                        <div class="row" style="margin-bottom: 0.5rem;">
-                            <div class="col-5">
-                                <p class="card-text">擔任負責人：{{i.job_title}}</p>
-                            </div>
-                            <div class="col-6">
-                                <p class="card-text">擔任非負責人：{{i.job_title2}}</p>
-                            </div>
-                        </div>
-                        <form action="" method="post">
-                            {% csrf_token %}
-                            <a href="http://127.0.0.1:8000/update_job/{{i.lineId}}/{{i.id}}/" class="btn btn-primary">修改</a>
-                            <button type="submit" class="btn btn-danger" id="{{i.id}}" name="del" value="{{i.id}}"
-                                onclick="test(this.value,this.id)">刪除</button>
-                        </form>
+        {% if i.job_type == '全職' %}
+        <div class="card">
+            <h5 class="card-header">{{i.job_type}}</h5>
+            <div class="card-body">
+                <h5 class="card-title">姓名：{{i.name}}</h5>
+                <p class="card-text">期望薪資：{{i.minSalary}}~{{i.maxSalary}}</p>
+                <p class="card-text">期望工作地點：{{i.address}}</p>
+                <p class="card-text">聯絡電話：{{i.Phone}}</p>
+                <div class="row" style="margin-bottom: 0.5rem;">
+                    <div class="col-5">
+                        <p class="card-text">擔任負責人：{{i.job_title}}</p>
+                    </div>
+                    <div class="col-6">
+                        <p class="card-text">擔任非負責人：{{i.job_title2}}</p>
                     </div>
                 </div>
-            {% else %}
-                <div class="card">
-                    <h5 class="card-header">{{i.job_type}}</h5>
-                    <div class="card-body">
-                        <h5 class="card-title">姓名：{{i.name}}</h5>
-                        <p class="card-text">期望薪資：{{i.minSalary}}~{{i.maxSalary}}</p>
-                        <p class="card-text">期望工作地點：{{i.address}}</p>
-                        <p class="card-text">聯絡電話：{{i.Phone}}</p>
-                        <form action="" method="post">
-                            {% csrf_token %}
-                            <a href="http://127.0.0.1:8000/update_job/{{i.lineId}}/{{i.id}}/" class="btn btn-primary">修改</a>
-                            <button type="submit" class="btn btn-danger" id="{{i.id}}" name="del" value="{{i.id}}"
-                                onclick="test(this.value,this.id)">刪除</button>
-                        </form>
-                    </div>
-                </div>
-            {% endif %}
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <a href="https://w1.linebot.com.tw/update_job/{{i.lineId}}/{{i.id}}/" class="btn btn-primary">修改</a>
+                    <button type="submit" class="btn btn-danger" id="{{i.id}}" name="del" value="{{i.id}}"
+                        onclick="test(this.value,this.id)">刪除</button>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <div class="card">
+            <h5 class="card-header">{{i.job_type}}</h5>
+            <div class="card-body">
+                <h5 class="card-title">姓名：{{i.name}}</h5>
+                <p class="card-text">期望薪資：{{i.minSalary}}~{{i.maxSalary}}</p>
+                <p class="card-text">期望工作地點：{{i.address}}</p>
+                <p class="card-text">聯絡電話：{{i.Phone}}</p>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <a href="https://w1.linebot.com.tw/update_job/{{i.lineId}}/{{i.id}}/" class="btn btn-primary">修改</a>
+                    <button type="submit" class="btn btn-danger" id="{{i.id}}" name="del" value="{{i.id}}"
+                        onclick="test(this.value,this.id)">刪除</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
         {% endfor %}
     </div>
     <script>

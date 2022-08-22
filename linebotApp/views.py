@@ -106,7 +106,7 @@ def callback(request):
 
             if msg == '@求才資料設定':
                 if company.objects.filter(lineId=lineId).exists():
-                    url = 'http://127.0.0.1:8000/selectCompany/%s' % lineId
+                    url = 'https://w1.linebot.com.tw/selectCompany/%s' % lineId
                     line_bot_api.reply_message(
                         event.reply_token, FlexSendMessage(
                             alt_text='搜尋結果',
@@ -212,7 +212,7 @@ def callback(request):
                 func.company_register(event, msg, lineId)
             if msg == '@求職資料設定':
                 if job_hunting.objects.filter(lineId=lineId).exists():
-                    url = 'http://127.0.0.1:8000/update_job/' + \
+                    url = 'https://w1.linebot.com.tw/update_job/' + \
                         str(lineId)
                     line_bot_api.reply_message(
                         event.reply_token, FlexSendMessage(
@@ -342,7 +342,7 @@ def callback(request):
 
             if msg == '@求職資料修改':
                 if job_hunting.objects.filter(lineId=lineId).exists():
-                    url = 'http://127.0.0.1:8000/update_job/' + \
+                    url = 'https://w1.linebot.com.tw/update_job/' + \
                         str(lineId)
                     line_bot_api.reply_message(
                         event.reply_token, FlexSendMessage(
@@ -390,7 +390,7 @@ def callback(request):
 
 
 @csrf_exempt
-def update_job(request,lineId , id):
+def update_job(request, lineId, id):
     if job_hunting.objects.filter(lineId=lineId).exists() and job_hunting.objects.filter(id=id).exists():
         userData = job_hunting.objects.get(id=id)
         data = job_hunting.objects.get(id=id)
@@ -411,21 +411,21 @@ def update_job(request,lineId , id):
         job_type = request.POST['job_type']
         job_title = request.POST.get('job_title')
         job_title2 = request.POST.get('job_title2')
-        if(job_title!=None):
+        if(job_title != None):
             job_title = '是'
         else:
             job_title = '否'
-        if(job_title2!=None):
+        if(job_title2 != None):
             job_title2 = '是'
         else:
             job_title2 = '否'
-        print(name, minSalary, maxSalary, address, phone, remark,job_type,job_title, job_title2)
+        print(name, minSalary, maxSalary, address, phone,
+              remark, job_type, job_title, job_title2)
 
         if job_hunting.objects.filter(id=id).exists():
             try:
                 job_hunting.objects.filter(id=id).update(
-                    name=name, minSalary=minSalary, maxSalary=maxSalary, address=address, Phone=phone, remark=remark
-                    ,job_type=job_type, job_title=job_title,job_title2=job_title2
+                    name=name, minSalary=minSalary, maxSalary=maxSalary, address=address, Phone=phone, remark=remark, job_type=job_type, job_title=job_title, job_title2=job_title2
                 )
             except:
                 message = '修改失敗！'
