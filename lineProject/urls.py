@@ -19,8 +19,8 @@ from linebotApp import views
 from django.urls import include, re_path
 urlpatterns = [
     re_path('^callback', views.callback),
-    # re_path('updateDate/<int:id>/', views.update_job),
-    re_path(r'^updateDate/(?P<id>\w+)/$', views.update_job, name='update_job'),
+    re_path(r'^select_job/(?P<id>\w+)/$', views.select_job, name='select_job'),
+    re_path(r'^update_job/(?P<lineId>\w+)/(?P<id>\w+)/$', views.update_job, name='update_job'),
     re_path(r'^selectCompany/(?P<id>\w+)/$',
             views.selectCompany, name='selectCompany'),
     re_path(r'^updateCompany/(?P<lineId>\w+)/(?P<id>\w+)/$',

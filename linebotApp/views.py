@@ -106,7 +106,7 @@ def callback(request):
 
             if msg == '@求才資料設定':
                 if company.objects.filter(lineId=lineId).exists():
-                    url = 'https://w1.linebot.com.tw/selectCompany/%s' % lineId
+                    url = 'http://127.0.0.1:8000/selectCompany/%s' % lineId
                     line_bot_api.reply_message(
                         event.reply_token, FlexSendMessage(
                             alt_text='搜尋結果',
@@ -212,7 +212,7 @@ def callback(request):
                 func.company_register(event, msg, lineId)
             if msg == '@求職資料設定':
                 if job_hunting.objects.filter(lineId=lineId).exists():
-                    url = 'http://w1.linebot.com.tw/updateDate/' + \
+                    url = 'http://127.0.0.1:8000/update_job/' + \
                         str(lineId)
                     line_bot_api.reply_message(
                         event.reply_token, FlexSendMessage(
@@ -227,6 +227,27 @@ def callback(request):
                                             "type": "box",
                                             "layout": "vertical",
                                             "contents": [
+                                                {
+                                                    "type": "text",
+                                                    "text": "求職資料登記",
+                                                    "size": "lg",
+                                                    "weight": "bold"
+                                                },
+                                                {
+                                                    "type": "separator",
+                                                    "margin": "md",
+                                                    "color": "#000000"
+                                                },
+                                                {
+                                                    "type": "button",
+                                                    "action": {
+                                                        "type": "uri",
+                                                        "label": "求職資料登記",
+                                                        "uri": "https://liff.line.me/1656626380-ZrL4j5xO"
+                                                    },
+                                                    "style": "secondary",
+                                                    "margin": "md"
+                                                },
                                                 {
                                                     "type": "text",
                                                     "text": "查詢登記資料",
@@ -321,7 +342,7 @@ def callback(request):
 
             if msg == '@求職資料修改':
                 if job_hunting.objects.filter(lineId=lineId).exists():
-                    url = 'https://joblinebotapp.herokuapp.com/updateDate/' + \
+                    url = 'http://127.0.0.1:8000/update_job/' + \
                         str(lineId)
                     line_bot_api.reply_message(
                         event.reply_token, FlexSendMessage(
@@ -369,9 +390,10 @@ def callback(request):
 
 
 @csrf_exempt
-def update_job(request, id):
-    if job_hunting.objects.filter(lineId=id).exists():
-        userData = job_hunting.objects.get(lineId=id)
+def update_job(request,lineId , id):
+    if job_hunting.objects.filter(lineId=lineId).exists() and job_hunting.objects.filter(id=id).exists():
+        userData = job_hunting.objects.get(id=id)
+        data = job_hunting.objects.get(id=id)
         userName = userData.name
         userminSalary = userData.minSalary
         usermaxSalary = userData.maxSalary
@@ -386,22 +408,51 @@ def update_job(request, id):
         address = request.POST['County']+request.POST['address']
         phone = request.POST['phone']
         remark = request.POST['remark']
+        job_type = request.POST['job_type']
+        job_title = request.POST.get('job_title')
+        job_title2 = request.POST.get('job_title2')
+        if(job_title!=None):
+            job_title = '是'
+        else:
+            job_title = '否'
+        if(job_title2!=None):
+            job_title2 = '是'
+        else:
+            job_title2 = '否'
+        print(name, minSalary, maxSalary, address, phone, remark,job_type,job_title, job_title2)
 
-        if job_hunting.objects.filter(lineId=id).exists():
+        if job_hunting.objects.filter(id=id).exists():
             try:
-                job_hunting.objects.filter(lineId=id).update(
+                job_hunting.objects.filter(id=id).update(
                     name=name, minSalary=minSalary, maxSalary=maxSalary, address=address, Phone=phone, remark=remark
+                    ,job_type=job_type, job_title=job_title,job_title2=job_title2
                 )
-                userName = userData.name
-                userminSalary = userData.minSalary
-                usermaxSalary = userData.maxSalary
-                userCounty = userData.address[:3]
-                userAddress = userData.address[3:]
-                userPhone = userData.Phone
-                userRemark = userData.remark
             except:
                 message = '修改失敗！'
+        data = job_hunting.objects.get(id=id)
+        userName = userData.name
+        userminSalary = userData.minSalary
+        usermaxSalary = userData.maxSalary
+        userCounty = userData.address[:3]
+        userAddress = userData.address[3:]
+        userPhone = userData.Phone
+        userRemark = userData.remark
     return render(request, 'update_job.html', locals())
+
+
+@csrf_exempt
+def select_job(request, id):
+    if job_hunting.objects.filter(lineId=id).exists():
+        data = job_hunting.objects.filter(lineId=id)  # 搜尋所有資料
+    if request.method == "POST":
+        id = request.POST['del']
+        if(id == 'NO'):
+            pass
+        else:
+            if job_hunting.objects.filter(id=id).exists():
+                delData = job_hunting.objects.get(id=id)
+                delData.delete()
+    return render(request, 'select_job.html', locals())
 
 
 @csrf_exempt

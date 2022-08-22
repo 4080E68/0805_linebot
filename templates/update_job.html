@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,6 +13,7 @@
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <title>修改資料</title>
 </head>
+
 <body>
     <div class="container">
         <br>
@@ -25,26 +27,15 @@
                 <label for="name" class="form-label">姓名</label>
                 <input class="form-control" type="text" id="name" name="name" value="{{userName}}">
             </div>
-            <p>期望薪資</p>
-            <div class="row">
-                <div class="col input-group">
-                    <span class="input-group-text">時薪</span>
-                    <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin" value="{{userminSalary}}" name="minSalary">
-                </div>
-                ~
-                <div class="col input-group">
-                    <span class="input-group-text">時薪</span>
-                    <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax" value="{{usermaxSalary}}" name="maxSalary">
-                </div>
-            </div>
+            <label for="job_type" class="form-label">工作種類</label>
+            <select class="form-select" aria-label="Default select example" id="job_type" name="job_type">
+                <option value="支援">支援</option>
+                <option value="全職">全職</option>
+            </select>
             <br>
-            <!-- <div class="row">
-                <div class="mb-3">
-                    <label for="address" class="form-label">期望工作地點</label>
-                    <input type="hidden" name="" id="addressData" value="{{userAddress}}">
-                    <select class="form-select" id="address" name="address" required></select>
-                </div>
-            </div> -->
+            <label for="Smin" class="form-label">期望薪資</label>
+            <div class="row" id="Srow" style="margin-bottom: 0.5rem ;"></div>
+
             <div class="row">
                 <div class="mb-3">
                     <label for="County" class="form-label">請選擇求職縣市</label>
@@ -71,12 +62,14 @@
 
             <div class="d-grid gap-2">
                 <button class="btn btn-primary" type="submit" onclick="sub()">送出</button>
+                <button class="btn btn-secondary" type="button"
+                    onclick="location.href='http://127.0.0.1:8000/select_job/{{data.lineId}}'">返回上一頁</button>
             </div>
         </form>
 
     </div>
 </body>
-<script type="text/javascript">
+<script>
     area_data = {
         '臺北市': [
             '中正區', '大同區', '中山區', '萬華區', '信義區', '松山區', '大安區', '南港區', '北投區', '內湖區', '士林區', '文山區'
@@ -153,10 +146,121 @@
     let userCounty = document.getElementById('userCounty').value
     let userAddress = document.getElementById('userAddress').value
     let remark = document.getElementById('floatingTextarea2')
+    let job_type = document.getElementById('job_type')
+    let Srow = document.getElementById('Srow')
+    for (let i = 0; i < job_type.children.length; i++) {
+        if (job_type.children[i].text == '{{data.job_type}}') {
+            job_type.children[i].selected = true
+            Srow.innerHTML = ''
+            Srow.innerHTML = `
+            <div class="row" id="Srow2">
+                    <div class="col input-group">
+                        <span class="input-group-text">月薪</span>
+                        <input type="number" class="form-control" placeholder="最低薪資" aria-label="First name" id="Smin"
+                        value="{{data.minSalary}}" name="minSalary">
+                    </div>
+                    ~
+                    <div class="col input-group">
+                        <span class="input-group-text">月薪</span>
+                        <input type="number" class="form-control" placeholder="最高薪資" aria-label="Last name" id="Smax"
+                        value="{{data.maxSalary}}" name="maxSalary">
+                    </div>
+            </div>
+            <div class="row" id="jobTitle" style="margin-bottom: 1rem; margin-top: 1rem;">
+                <label class="form-label">可擔任職務</label>
+                <div class="col">
+                    <input class="form-check-input" type="checkbox" value="" id="job_title" name="job_title">
+                    <label class="form-check-label" for="job_title">
+                        負責人
+                    </label>
+                </div>
+                <div class="col">
+                    <input class="form-check-input" type="checkbox" value="" id="job_title2" name="job_title2">
+                    <label class="form-check-label" for="job_title2">
+                        非負責人
+                    </label>
+                </div>
+            </div>
+            `
+            let jobTitle = document.getElementById('job_title')
+            let jobTitle2 = document.getElementById('job_title2')
+            const data1 = "{{data.job_title}}"
+            const data2 = "{{data.job_title2}}"
+            if (data1 == '是') {
+                jobTitle.checked = true
+            }
+            if (data2 == '是') {
+                jobTitle2.checked = true
+            }
+        }
+        else {
+            Srow.innerHTML = ''
+            Srow.innerHTML = `
+            <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin"
+                    value="{{data.minSalary}}" name="minSalary">
+                </div>
+                ~
+                <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax"
+                    value="{{data.minSalary}}" name="maxSalary">
+                </div>
+            `
+        }
+    }
+    job_type.addEventListener('change', () => {
+        if (job_type.value == '全職') {
+            Srow.innerHTML = ''
+            Srow.innerHTML = `
+            <div class="row" id="Srow2">
+                    <div class="col input-group">
+                        <span class="input-group-text">月薪</span>
+                        <input type="number" class="form-control" placeholder="最低薪資" aria-label="First name" id="Smin" name="minSalary">
+                    </div>
+                    ~
+                    <div class="col input-group">
+                        <span class="input-group-text">月薪</span>
+                        <input type="number" class="form-control" placeholder="最高薪資" aria-label="Last name" id="Smax" name="maxSalary">
+                    </div>
+            </div>
+            <div class="row" id="jobTitle" style="margin-bottom: 1rem; margin-top: 1rem;">
+                <label class="form-label">可擔任職務</label>
+                <div class="col">
+                    <input class="form-check-input" type="checkbox" value="" id="job_title" name="job_title">
+                    <label class="form-check-label" for="job_title">
+                        負責人
+                    </label>
+                </div>
+                <div class="col">
+                    <input class="form-check-input" type="checkbox" value="" id="job_title2" name="job_title2">
+                    <label class="form-check-label" for="job_title2">
+                        非負責人
+                    </label>
+                </div>
+            </div>
+            `
+        } else {
+            Srow.innerHTML = ''
+            Srow.innerHTML = `
+            <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin" name="minSalary">
+                </div>
+                ~
+                <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax" name="maxSalary">
+                </div>
+            `
+        }
+    })
     remark.innerHTML = '{{userRemark}}'
     County_data.forEach((e, index) => {
         County.options[County.options.length] = new Option(e, e);
     })
+
     for (let i = 0; i < County.children.length; i++) {
         if (County.children[i].text == userCounty) {
             var CountyF = County.children[i].text
@@ -191,25 +295,6 @@
         }
     })
 
-    // Using a Promise object
-    // let option = document.querySelectorAll('#option')
-    // let salary = document.getElementById('salary').value
-    // // let salary1 = document.getElementById('salary1').value
-    // // option.forEach(e => {
-    // //     if (e.text == salary1.substr(0, 2)) {
-    // //         e.selected = true
-    // //     }
-    // // });
-
-    // setTimeout(() => {
-    //     let addressOption = document.querySelectorAll('#address option')
-    //     let addressData = document.getElementById('addressData').value
-    //     addressOption.forEach((e) => {
-    //         if (e.text == addressData) {
-    //             e.selected = true
-    //         }
-    //     })
-    // }, 300)
     function sub() {
         alert('修改成功！您現在可以關閉此視窗')
     }

@@ -37,6 +37,14 @@ def job_register(event, msg, lineId):  # 註冊資料
     job_title = flist[7]
     job_title2 = flist[8]
     lineid = lineId
+    if(job_title == 'true'):
+        job_title = '是'
+    else:
+        job_title = '否'
+    if(job_title2 == 'true'):
+        job_title2 = '是'
+    else:
+        job_title2 = '否'
 
     user = job_hunting.objects.create(
         name=name, minSalary=minSalary,
