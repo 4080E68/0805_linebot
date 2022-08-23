@@ -31,8 +31,27 @@
                 <label for="name" class="form-label">聯絡人</label>
                 <input class="form-control" type="text" id="name" required value="{{data.name}}" name="name">
             </div>
+            <label for="job_type" class="form-label">工作種類</label>
+            <select class="form-select" aria-label="Default select example" id="job_type" name="job_type">
+                <option value="支援">支援</option>
+                <option value="全職">全職</option>
+            </select>
+            <br>
             <label for="Smin" class="form-label">提供薪資</label>
-            <div class="row">
+            <div class="row" id="Srow">
+                {% if data.job_type == '全職' %}
+                <div class="col input-group">
+                    <span class="input-group-text">月薪</span>
+                    <input type="number" class="form-control" placeholder="最低月薪" aria-label="First name" id="Smin"
+                        value="{{data.minSalary}}" name="Smin">
+                </div>
+                ~
+                <div class="col input-group">
+                    <span class="input-group-text">月薪</span>
+                    <input type="number" class="form-control" placeholder="最高月薪" aria-label="Last name" id="Smax"
+                        value="{{data.maxSalary}}" name="Smax">
+                </div>
+                {% else %}
                 <div class="col input-group">
                     <span class="input-group-text">時薪</span>
                     <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin"
@@ -44,6 +63,8 @@
                     <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax"
                         value="{{data.maxSalary}}" name="Smax">
                 </div>
+                {% endif %}
+
             </div>
             <br>
             <div class="row">
@@ -69,6 +90,8 @@
                 <label for="remark">備註</label>
             </div>
             <br>
+            <h5>提供福利</h5>
+            <hr>
             <div class="row">
                 <div class="col">
                     <input class="form-check-input" type="checkbox" id="assistant" name="assistant">
@@ -83,6 +106,49 @@
                     </label>
                 </div>
             </div>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <input class="form-check-input welfare" type="checkbox" value="三節獎金" id="welfare1">
+                    <label class="form-check-label" for="welfare1">
+                        三節獎金
+                    </label>
+                </div>
+                <div class="col">
+                    <input class="form-check-input welfare" type="checkbox" value="績效獎金" id="welfare2">
+                    <label class="form-check-label" for="welfare2">
+                        績效獎金
+                    </label>
+                </div>
+                <div class="col">
+                    <input class="form-check-input welfare" type="checkbox" value="交通津貼" id="welfare3">
+                    <label class="form-check-label" for="welfare3">
+                        交通津貼
+                    </label>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <input class="form-check-input welfare" type="checkbox" value="勞健保" id="welfare4">
+                    <label class="form-check-label" for="welfare4">
+                        勞健保
+                    </label>
+                </div>
+                <div class="col">
+                    <input class="form-check-input welfare" type="checkbox" value="部門聚餐" id="welfare5">
+                    <label class="form-check-label" for="welfare5">
+                        部門聚餐
+                    </label>
+                </div>
+                <div class="col">
+                    <input class="form-check-input welfare" type="checkbox" value="年終獎金" id="welfare6">
+                    <label class="form-check-label" for="welfare6">
+                        年終獎金
+                    </label>
+                </div>
+            </div>
+            <input type="hidden" name="welfare" value="" id="welfare">
             <br>
             <div class="d-grid gap-2">
                 <button class="btn btn-primary" type="submit">送出</button>
@@ -172,6 +238,68 @@
     const dataOvertime_pay = '{{data.overtime_pay}}'
     let assistant = document.getElementById('assistant')
     let overtime_pay = document.getElementById('overtime_pay')
+    let job_type = document.getElementById('job_type')
+    for (let i = 0; i < job_type.children.length; i++) {
+        if (job_type.children[i].value == '{{data.job_type}}') {
+            job_type.children[i].selected = true
+        }
+    }
+    job_type.addEventListener('change', () => {
+        if (job_type.value == '全職') {
+            Srow.innerHTML = ''
+            Srow.innerHTML = `
+            <div class="row" id="Srow2">
+                    <div class="col input-group">
+                        <span class="input-group-text">月薪</span>
+                        <input type="number" class="form-control" placeholder="最低薪資" aria-label="First name" id="Smin" name="Smin">
+                    </div>
+                    ~
+                    <div class="col input-group">
+                        <span class="input-group-text">月薪</span>
+                        <input type="number" class="form-control" placeholder="最高薪資" aria-label="Last name" id="Smax" name="Smax">
+                    </div>
+            </div>
+            `
+        } else {
+            Srow.innerHTML = ''
+            Srow.innerHTML = `
+            <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin" name="Smin">
+                </div>
+                ~
+                <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax" name="Smax">
+                </div>
+            `
+        }
+    })
+    let welfare = document.querySelectorAll('.welfare')
+    let welfare_arr = []
+    let strs = '{{data.welfare}}'.split(',')
+    let final_welfare = document.getElementById('welfare')
+
+    welfare.forEach((e) => {
+        for (let i = 0; i < strs.length; i++) {
+            if (e.value == strs[i]) {
+                e.checked = true
+                welfare_arr.push(e.value)
+                final_welfare.value = welfare_arr
+            }
+        }
+        e.addEventListener('change', () => {
+            if (e.checked == true) {
+                welfare_arr.push(e.value)
+            }
+            if (e.checked == false) {
+                welfare_arr = welfare_arr.filter(function (item) {
+                    return item != e.value
+                })
+            }
+            final_welfare.value = welfare_arr
+        })
+    })
 
     if (dataAssistant == '是') {
         assistant.checked = true

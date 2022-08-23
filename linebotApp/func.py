@@ -1,3 +1,4 @@
+from typing import final
 from django.conf import settings
 from linebotApp.models import *
 from linebot import LineBotApi
@@ -67,12 +68,14 @@ def company_register(event, msg, lineId):  # 求才註冊資料
     remark = flist[6]
     assistant = flist[7]
     overtime_pay = flist[8]
-    print(flist)
+    job_type = flist[9]
+    welfare = flist[10]
 
     user = company.objects.create(
         companyName=companyName, name=name, minSalary=minSalary, maxSalary=maxSalary, address=address, Phone=Phone,
-        remark=remark, assistant=assistant, overtime_pay=overtime_pay, lineId=lineId)
+        remark=remark, assistant=assistant, overtime_pay=overtime_pay, lineId=lineId, job_type = job_type, welfare = welfare)
     user.save()
+    
     line_bot_api.reply_message(
         event.reply_token, TextSendMessage(text='註冊成功！' + '\n' + '現在可以開始使用求才功能'))
 

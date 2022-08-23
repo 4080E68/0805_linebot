@@ -29,8 +29,14 @@
                 <label for="name" class="form-label">聯絡人</label>
                 <input class="form-control" type="text" id="name" required>
             </div>
+            <label for="job_type" class="form-label">工作種類</label>
+            <select class="form-select" aria-label="Default select example" id="job_type">
+                <option value="支援">支援</option>
+                <option value="全職">全職</option>
+            </select>
+            <br>
             <label for="Smin" class="form-label">提供薪資</label>
-            <div class="row">
+            <div class="row" id="Srow">
                 <div class="col input-group">
                     <span class="input-group-text">時薪</span>
                     <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin">
@@ -65,6 +71,8 @@
                 <label for="floatingTextarea2">備註</label>
             </div>
             <br>
+            <h5>提供福利</h5>
+            <hr>
             <div class="row">
                 <div class="col">
                     <input class="form-check-input" type="checkbox" value="" id="assistant">
@@ -81,7 +89,48 @@
             </div>
             <br>
 
-
+            <div class="row">
+                <div class="col">
+                    <input class="form-check-input welfare" type="checkbox" value="三節獎金" id="welfare1">
+                    <label class="form-check-label" for="welfare1">
+                        三節獎金
+                    </label>
+                </div>
+                <div class="col">
+                    <input class="form-check-input welfare" type="checkbox" value="績效獎金" id="welfare2">
+                    <label class="form-check-label" for="welfare2">
+                        績效獎金
+                    </label>
+                </div>
+                <div class="col">
+                    <input class="form-check-input welfare" type="checkbox" value="交通津貼" id="welfare3">
+                    <label class="form-check-label" for="welfare3">
+                        交通津貼
+                    </label>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <input class="form-check-input welfare" type="checkbox" value="勞健保" id="welfare4">
+                    <label class="form-check-label" for="welfare4">
+                        勞健保
+                    </label>
+                </div>
+                <div class="col">
+                    <input class="form-check-input welfare" type="checkbox" value="部門聚餐" id="welfare5">
+                    <label class="form-check-label" for="welfare5">
+                        部門聚餐
+                    </label>
+                </div>
+                <div class="col">
+                    <input class="form-check-input welfare" type="checkbox" value="年終獎金" id="welfare6">
+                    <label class="form-check-label" for="welfare6">
+                        年終獎金
+                    </label>
+                </div>
+            </div>
+            <br>
 
             <div class="d-grid gap-2">
                 <button class="btn btn-primary" type="button" onclick="push()">送出</button>
@@ -90,6 +139,8 @@
     </div>
 </body>
 <script>
+
+
     area_data = {
         '臺北市': [
             '中正區', '大同區', '中山區', '萬華區', '信義區', '松山區', '大安區', '南港區', '北投區', '內湖區', '士林區', '文山區'
@@ -163,6 +214,39 @@
     let area = Object.values(area_data)
     let County = document.getElementById('County')
     let address = document.getElementById('address');
+    let Srow = document.getElementById('Srow')
+    let jobTitle = document.getElementById('jobTitle')
+    job_type.addEventListener('change', () => {
+        if (job_type.value == '全職') {
+            Srow.innerHTML = ''
+            Srow.innerHTML = `
+            <div class="row" id="Srow2">
+                    <div class="col input-group">
+                        <span class="input-group-text">月薪</span>
+                        <input type="number" class="form-control" placeholder="最低薪資" aria-label="First name" id="Smin">
+                    </div>
+                    ~
+                    <div class="col input-group">
+                        <span class="input-group-text">月薪</span>
+                        <input type="number" class="form-control" placeholder="最高薪資" aria-label="Last name" id="Smax">
+                    </div>
+            </div>
+            `
+        } else {
+            Srow.innerHTML = ''
+            Srow.innerHTML = `
+            <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin">
+                </div>
+                ~
+                <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax">
+                </div>
+            `
+        }
+    })
 
     County_data.forEach((e, index) => {
         County.options[County.options.length] = new Option(e, e);
@@ -219,6 +303,20 @@
         })
 </script>
 <script>
+    let welfare = document.querySelectorAll('.welfare')
+    let welfare_arr = []
+    welfare.forEach((e) => {
+        e.addEventListener('change', () => {
+            if (e.checked == true) {
+                welfare_arr.push(e.value)
+            }
+            if (e.checked == false) {
+                welfare_arr = welfare_arr.filter(function (item) {
+                    return item != e.value
+                })
+            }
+        })
+    })
     function push() {
         let companyName = document.getElementById('companyName').value
         let name = document.getElementById('name').value
@@ -230,6 +328,7 @@
         let remark = document.getElementById('floatingTextarea2').value
         let assistant = document.getElementById('assistant').checked
         let overtime_pay = document.getElementById('overtime_pay').checked
+        let job_type = document.getElementById('job_type').value
         assistant = assistant ? '是' : '否'
         overtime_pay = overtime_pay ? '是' : '否'
         if (remark == '') {
@@ -250,7 +349,9 @@
             msg = msg + phone + "&";
             msg = msg + remark + "&";
             msg = msg + assistant + "&";
-            msg = msg + overtime_pay;
+            msg = msg + overtime_pay + "&";
+            msg += job_type + "&";
+            msg += welfare_arr.join(',')
             console.log(msg);
 
             liff.sendMessages([  //推播訊息

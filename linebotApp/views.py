@@ -479,11 +479,13 @@ def update_Company(request, lineId, id):
     if request.method == "POST":
         companyName = request.POST['companyName']
         name = request.POST['name']
+        job_type = request.POST['job_type']
         minSalary = request.POST['Smin']
         maxSalary = request.POST['Smax']
         address = request.POST['County']+request.POST['address']
         phone = request.POST['phone']
         remark = request.POST['remark']
+        welfare = request.POST['welfare']
         assistant = request.POST.get('assistant')
         overtime_pay = request.POST.get('overtime_pay')
         if assistant == 'on':
@@ -495,14 +497,15 @@ def update_Company(request, lineId, id):
         else:
             overtime_pay = '否'
         print(companyName, name, minSalary, maxSalary,
-              address, phone, remark, assistant, overtime_pay)
+              address, phone, remark, assistant, overtime_pay, job_type,welfare)
         if company.objects.filter(id=id).exists():
             try:
                 company.objects.filter(id=id).update(
                     companyName=companyName, name=name,
                     minSalary=minSalary, maxSalary=maxSalary,
                     address=address, Phone=phone, remark=remark,
-                    assistant=assistant, overtime_pay=overtime_pay
+                    assistant=assistant, overtime_pay=overtime_pay,
+                    job_type=job_type,welfare=welfare
                 )
                 data = company.objects.get(id=id)  # 搜尋所有資料
                 dataCounty = data.address[:3]
