@@ -127,6 +127,10 @@ def select_job(event, msg):
     else:
         for i in result:
             count += 1
+            if(i.job_type=='支援'):
+                i.minSalary = '時薪' + str(i.minSalary)
+            else:
+                i.minSalary = '月薪' + str(i.minSalary)
             if(count != len(result)):
                 message += '執業場所名稱：' + str(i.companyName) + '\n' \
                     '聯絡人：' + str(i.name) + '\n'\
@@ -149,9 +153,10 @@ def select_job(event, msg):
                     '是否有提供助理：' + str(i.assistant) + '\n'\
                     '是否有提供加班費：' + str(i.overtime_pay) + '\n'\
                     '福利：' + str(i.welfare)
-
-    line_bot_api.reply_message(
-        event.reply_token, TextSendMessage(message))
+    
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(message))
+    
 
 
 def select_staff(event, msg):
