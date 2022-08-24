@@ -21,16 +21,23 @@
             <h1>搜尋職缺</h1>
         </div>
         <form id="form">
+            <label for="job_type" class="form-label">工作種類</label>
+            <select class="form-select" aria-label="Default select example" id="job_type">
+                <option value="不拘">不拘</option>
+                <option value="支援">支援</option>
+                <option value="全職">全職</option> 
+            </select>
+            <br>
             <p>期望薪資</p>
-            <div class="row">
+            <div class="row" id="Srow">
                 <div class="col input-group">
-                    <span class="input-group-text">時薪</span>
-                    <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin">
+                    <span class="input-group-text">月薪</span>
+                    <input type="number" class="form-control" placeholder="最低薪資" aria-label="First name" id="Smin">
                 </div>
                 ~
                 <div class="col input-group">
-                    <span class="input-group-text">時薪</span>
-                    <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax">
+                    <span class="input-group-text">月薪</span>
+                    <input type="number" class="form-control" placeholder="最高薪資" aria-label="Last name" id="Smax">
                 </div>
             </div>
             <br>
@@ -141,7 +148,40 @@
     let area = Object.values(area_data)
     let County = document.getElementById('County')
     let address = document.getElementById('address');
+    let job_type = document.getElementById('job_type')
+    let Srow = document.getElementById('Srow')
 
+    job_type.addEventListener('change', () => {
+        if (job_type.value == '全職' || job_type.value == '不拘') {
+            Srow.innerHTML = ''
+            Srow.innerHTML = `
+            <div class="row" id="Srow2">
+                    <div class="col input-group">
+                        <span class="input-group-text">月薪</span>
+                        <input type="number" class="form-control" placeholder="最低薪資" aria-label="First name" id="Smin">
+                    </div>
+                    ~
+                    <div class="col input-group">
+                        <span class="input-group-text">月薪</span>
+                        <input type="number" class="form-control" placeholder="最高薪資" aria-label="Last name" id="Smax">
+                    </div>
+            </div>
+            `
+        } else {
+            Srow.innerHTML = ''
+            Srow.innerHTML = `
+            <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin">
+                </div>
+                ~
+                <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax">
+                </div>
+            `
+        }
+    })
     County_data.forEach((e, index) => {
         County.options[County.options.length] = new Option(e, e);
     })
@@ -180,17 +220,19 @@
         let County_result = document.getElementById('County').value
         let assistant = document.getElementById('assistant').checked
         let overtime_pay = document.getElementById('overtime_pay').checked
+        let job_type = document.getElementById('job_type').value
         if (Smin == '' || Smax == '') {
             return alert('請填寫薪資！')
-        } 
+        }
         else {
             var msg = "@搜尋求職";  //回傳訊息字串
             msg = msg + Smin + "&";
             msg = msg + Smax + "&";
             msg = msg + County_result + address + "&";
             msg = msg + assistant + "&";
-            msg = msg + overtime_pay
-            
+            msg = msg + overtime_pay + "&";
+            msg = msg + job_type;
+
             console.log(msg);
 
             liff.sendMessages([  //推播訊息

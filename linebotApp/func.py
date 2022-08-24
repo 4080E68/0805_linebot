@@ -87,9 +87,11 @@ def select_job(event, msg):
     address = flist[2]
     assistant = flist[3]
     overtime_pay = flist[4]
-    cursor = connection.cursor()
-    sql = overtime_pay[4:]
-    cursor.execute(sql)
+    job_type = flist[5]
+    
+    # cursor = connection.cursor()
+    # sql = job_type[2:]
+    # cursor.execute(sql)
     if(assistant == 'true'):
         assistant = '是'
     else:
@@ -100,13 +102,23 @@ def select_job(event, msg):
         overtime_pay = '否'
     if address[3:] == '不拘':
         address = address[:3] + '%'
-        result = company.objects.raw(
-            "select * from linebotApp_company where minSalary >= %s and maxSalary<=%s and address like %s \
-                and assistant=%s and overtime_pay=%s", [Smin, Smax, address, assistant, overtime_pay])
+        if(job_type == '不拘'):
+            result = company.objects.raw(
+                "select * from linebotApp_company where minSalary >= %s and maxSalary<=%s and address like %s \
+                    and assistant=%s and overtime_pay=%s", [Smin, Smax, address, assistant, overtime_pay])
+        else:
+            result = company.objects.raw(
+                "select * from linebotApp_company where job_type=%s and minSalary >= %s and maxSalary<=%s and address like %s \
+                    and assistant=%s and overtime_pay=%s", [job_type, Smin, Smax, address, assistant, overtime_pay])
     else:
-        result = company.objects.raw(
-            "select * from linebotApp_company where minSalary >= %s and maxSalary<=%s and address=%s \
-                and assistant=%s and overtime_pay=%s", [Smin, Smax, address, assistant, overtime_pay])
+        if(job_type == '不拘'):
+            result = company.objects.raw(
+                "select * from linebotApp_company where minSalary >= %s and maxSalary<=%s and address=%s \
+                    and assistant=%s and overtime_pay=%s", [Smin, Smax, address, assistant, overtime_pay])
+        else:
+            result = company.objects.raw(
+                "select * from linebotApp_company where job_type=%s and minSalary >= %s and maxSalary<=%s and address=%s \
+                    and assistant=%s and overtime_pay=%s", [job_type,Smin, Smax, address, assistant, overtime_pay])
     print(result)
     message = ''
     count = 0
@@ -118,21 +130,25 @@ def select_job(event, msg):
             if(count != len(result)):
                 message += '執業場所名稱：' + str(i.companyName) + '\n' \
                     '聯絡人：' + str(i.name) + '\n'\
+                    '工作性質：' + str(i.job_type) + '\n'\
                     '提供薪資：' + str(i.minSalary)+'~' + str(i.maxSalary) + '\n'\
                     '聯絡電話：' + str(i.Phone) + '\n'\
                     '工作地點：' + str(i.address) + '\n'\
                     '備註：' + str(i.remark) + '\n'\
                     '是否有提供助理：' + str(i.assistant) + '\n'\
-                    '是否有提供加班費：' + str(i.overtime_pay) + '\n\n'
+                    '是否有提供加班費：' + str(i.overtime_pay) + '\n'\
+                    '福利：' + str(i.welfare) + '\n\n'
             else:
                 message += '執業場所名稱：' + str(i.companyName) + '\n' \
                     '聯絡人：' + str(i.name) + '\n'\
+                    '工作性質：' + str(i.job_type) + '\n'\
                     '提供薪資：' + str(i.minSalary)+'~' + str(i.maxSalary) + '\n'\
                     '聯絡電話：' + str(i.Phone) + '\n'\
                     '工作地點：' + str(i.address) + '\n'\
                     '備註：' + str(i.remark) + '\n'\
                     '是否有提供助理：' + str(i.assistant) + '\n'\
-                    '是否有提供加班費：' + str(i.overtime_pay)
+                    '是否有提供加班費：' + str(i.overtime_pay) + '\n'\
+                    '福利：' + str(i.welfare)
 
     line_bot_api.reply_message(
         event.reply_token, TextSendMessage(message))
