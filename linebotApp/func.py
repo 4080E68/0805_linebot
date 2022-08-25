@@ -89,9 +89,9 @@ def select_job(event, msg):
     overtime_pay = flist[4]
     job_type = flist[5]
 
-    # cursor = connection.cursor()
-    # sql = job_type[2:]
-    # cursor.execute(sql)
+    cursor = connection.cursor()
+    sql = job_type[2:]
+    cursor.execute(sql)
     if(assistant == 'true'):
         assistant = '是'
     else:
