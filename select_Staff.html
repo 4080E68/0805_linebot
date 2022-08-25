@@ -21,16 +21,23 @@
             <h1>搜尋求職者</h1>
         </div>
         <form id="form">
-            <label for="Smin" class="form-label">期望薪資</label>
-            <div class="row">
+            <label for="job_type" class="form-label">工作種類</label>
+            <select class="form-select" aria-label="Default select example" id="job_type">
+                <option value="不拘">不拘</option>
+                <option value="支援">支援</option>
+                <option value="全職">全職</option>
+            </select>
+            <br>
+            <p>期望薪資</p>
+            <div class="row" id="Srow">
                 <div class="col input-group">
-                    <span class="input-group-text">時薪</span>
-                    <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin">
+                    <span class="input-group-text">月薪</span>
+                    <input type="number" class="form-control" placeholder="最低薪資" aria-label="First name" id="Smin">
                 </div>
                 ~
                 <div class="col input-group">
-                    <span class="input-group-text">時薪</span>
-                    <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax">
+                    <span class="input-group-text">月薪</span>
+                    <input type="number" class="form-control" placeholder="最高薪資" aria-label="Last name" id="Smax">
                 </div>
             </div>
             <br>
@@ -43,6 +50,21 @@
                     <select class="form-select" id="address" required>
                         <option value="不拘">不拘</option>
                     </select>
+                </div>
+            </div>
+            <div class="row" id="jobTitle" style="margin-bottom: 1rem; margin-top: 1rem;">
+                <label class="form-label">可擔任職務</label>
+                <div class="col">
+                    <input class="form-check-input" type="checkbox" value="" id="job_title">
+                    <label class="form-check-label" for="job_title">
+                        負責人
+                    </label>
+                </div>
+                <div class="col">
+                    <input class="form-check-input" type="checkbox" value="" id="job_title2">
+                    <label class="form-check-label" for="job_title2">
+                        非負責人
+                    </label>
                 </div>
             </div>
 
@@ -148,6 +170,40 @@
             }
         }
     })
+    let job_type = document.getElementById('job_type')
+    let Srow = document.getElementById('Srow')
+
+    job_type.addEventListener('change', () => {
+        if (job_type.value == '全職' || job_type.value == '不拘') {
+            Srow.innerHTML = ''
+            Srow.innerHTML = `
+            <div class="row" id="Srow2">
+                    <div class="col input-group">
+                        <span class="input-group-text">月薪</span>
+                        <input type="number" class="form-control" placeholder="最低薪資" aria-label="First name" id="Smin">
+                    </div>
+                    ~
+                    <div class="col input-group">
+                        <span class="input-group-text">月薪</span>
+                        <input type="number" class="form-control" placeholder="最高薪資" aria-label="Last name" id="Smax">
+                    </div>
+            </div>
+            `
+        } else {
+            Srow.innerHTML = ''
+            Srow.innerHTML = `
+            <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin">
+                </div>
+                ~
+                <div class="col input-group">
+                    <span class="input-group-text">時薪</span>
+                    <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax">
+                </div>
+            `
+        }
+    })
     liff
         .init({
             liffId: "1656626380-ReO7wnGd", // Use own liffId
@@ -164,16 +220,28 @@
         let Smax = document.getElementById('Smax').value
         let address = document.getElementById('address').value
         let County_result = document.getElementById('County').value
+        let job_type = document.getElementById('job_type').value
+        let job_title = document.getElementById('job_title').checked
+        let job_title2 = document.getElementById('job_title2').checked
+        if(job_title == false){
+            job_title = ''
+        }
+        if (job_title2 == false) {
+            job_title2 = ''
+        }
         if (Smin == '' || Smax == '') {
             return alert('請填寫薪資！')
-        } 
+        }
         else {
             var msg = "@搜尋求才";  //回傳訊息字串
             msg = msg + Smin + "&";
             msg = msg + Smax + "&";
-            msg = msg + County_result + address;
-         
-            
+            msg = msg + County_result + address + "&";
+            msg = msg + job_type + "&";
+            msg = msg + job_title + "&";
+            msg = msg + job_title2;
+
+
             console.log(msg);
 
             liff.sendMessages([  //推播訊息

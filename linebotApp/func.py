@@ -73,9 +73,9 @@ def company_register(event, msg, lineId):  # 求才註冊資料
 
     user = company.objects.create(
         companyName=companyName, name=name, minSalary=minSalary, maxSalary=maxSalary, address=address, Phone=Phone,
-        remark=remark, assistant=assistant, overtime_pay=overtime_pay, lineId=lineId, job_type = job_type, welfare = welfare)
+        remark=remark, assistant=assistant, overtime_pay=overtime_pay, lineId=lineId, job_type=job_type, welfare=welfare)
     user.save()
-    
+
     line_bot_api.reply_message(
         event.reply_token, TextSendMessage(text='註冊成功！' + '\n' + '現在可以開始使用求才功能'))
 
@@ -88,7 +88,7 @@ def select_job(event, msg):
     assistant = flist[3]
     overtime_pay = flist[4]
     job_type = flist[5]
-    
+
     # cursor = connection.cursor()
     # sql = job_type[2:]
     # cursor.execute(sql)
@@ -118,7 +118,7 @@ def select_job(event, msg):
         else:
             result = company.objects.raw(
                 "select * from linebotApp_company where job_type=%s and minSalary >= %s and maxSalary<=%s and address=%s \
-                    and assistant=%s and overtime_pay=%s", [job_type,Smin, Smax, address, assistant, overtime_pay])
+                    and assistant=%s and overtime_pay=%s", [job_type, Smin, Smax, address, assistant, overtime_pay])
     print(result)
     message = ''
     count = 0
@@ -127,7 +127,7 @@ def select_job(event, msg):
     else:
         for i in result:
             count += 1
-            if(i.job_type=='支援'):
+            if(i.job_type == '支援'):
                 i.minSalary = '時薪' + str(i.minSalary)
             else:
                 i.minSalary = '月薪' + str(i.minSalary)
@@ -153,10 +153,9 @@ def select_job(event, msg):
                     '是否有提供助理：' + str(i.assistant) + '\n'\
                     '是否有提供加班費：' + str(i.overtime_pay) + '\n'\
                     '福利：' + str(i.welfare)
-    
+
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(message))
-    
 
 
 def select_staff(event, msg):
@@ -164,31 +163,59 @@ def select_staff(event, msg):
     Smin = flist[0]
     Smax = flist[1]
     address = flist[2]
+    job_type = flist[3]
+    job_title = flist[4]
+    job_title2 = flist[5]
+    if job_title == 'true':
+        job_title = '是'
+    if job_title2 == 'true':
+        job_title2 = '是'
+    job_title = '%' + job_title + '%'
+    job_title2 = '%' + job_title2 + '%'
     if address[3:] == '不拘':
         address = address[:3] + '%'
-        result = job_hunting.objects.raw(
-            "select * from linebotApp_job_hunting where minSalary >= %s and maxSalary<=%s and address like %s", [Smin, Smax, address])
+        if(job_type == '不拘'):
+            result = job_hunting.objects.raw(
+                "select * from linebotApp_job_hunting where minSalary >= %s and maxSalary<=%s and address like %s and job_title like %s and job_title2 like %s", [Smin, Smax, address,job_title, job_title2])
+        else:
+            result = job_hunting.objects.raw(
+                "select * from linebotApp_job_hunting where job_type=%s and minSalary >= %s and maxSalary<=%s and address like %s and job_title like %s and job_title2 like %s", [job_type, Smin, Smax, address, job_title, job_title2])
     else:
-        result = job_hunting.objects.raw(
-            "select * from linebotApp_job_hunting where minSalary >= %s and maxSalary<=%s and address=%s", [Smin, Smax, address])
+        if(job_type == '不拘'):
+            result = job_hunting.objects.raw(
+                "select * from linebotApp_job_hunting where minSalary >= %s and maxSalary<=%s and address=%s and job_title like %s and job_title2 like %s", [Smin, Smax, address, job_title, job_title2])
+        else:
+            result = job_hunting.objects.raw(
+                "select * from linebotApp_job_hunting where job_type=%s and minSalary >= %s and maxSalary<=%s and address like %s and job_title like %s and job_title2 like %s", [job_type, Smin, Smax, address, job_title, job_title2])
     message = ''
     count = 0
+    print(result)
     if(len(result) == 0):
         message = '查無資料！'
     else:
         for i in result:
             count += 1
+            if(i.job_type == '支援'):
+                i.minSalary = '時薪' + str(i.minSalary)
+            else:
+                i.minSalary = '月薪' + str(i.minSalary)
             if(count != len(result)):
                 message += '姓名：' + str(i.name) + '\n'\
+                    '工作性質：' + str(i.job_type) + '\n'\
                     '期望薪資：' + str(i.minSalary)+'~' + str(i.maxSalary) + '\n'\
                     '聯絡電話：' + str(i.Phone) + '\n'\
                     '期望工作地點：' + str(i.address) + '\n'\
+                    '可擔任負責人：' + str(i.job_title) + '\n'\
+                    '可擔任非負責人：' + str(i.job_title2) + '\n'\
                     '備註：' + str(i.remark) + '\n\n'
             else:
                 message += '姓名：' + str(i.name) + '\n'\
+                    '工作性質：' + str(i.job_type) + '\n'\
                     '提供薪資：' + str(i.minSalary)+'~' + str(i.maxSalary) + '\n'\
                     '聯絡電話：' + str(i.Phone) + '\n'\
-                    '工作地點：' + str(i.address) + '\n'\
+                    '期望工作地點：' + str(i.address) + '\n'\
+                    '可擔任負責人：' + str(i.job_title) + '\n'\
+                    '可擔任非負責人：' + str(i.job_title2) + '\n'\
                     '備註：' + str(i.remark)
     line_bot_api.reply_message(
         event.reply_token, TextSendMessage(message))
