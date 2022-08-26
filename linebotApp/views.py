@@ -48,14 +48,6 @@ def callback(request):
                         count += 1
                         if(count < len(data)):
                             if(i.job_type == '全職'):
-                                if(i.job_title == 'true'):
-                                    i.job_title = '是'
-                                else:
-                                    i.job_title = '否'
-                                if(i.job_title2 == 'true'):
-                                    i.job_title2 = '是'
-                                else:
-                                    i.job_title2 = '否'
                                 message += '姓名：' + str(i.name) + \
                                     '\n'+'工作種類：' + str(i.job_type) + \
                                     '\n' + '期望薪資：' + '月薪' + str(i.minSalary) + '~' + str(i.maxSalary) + \
@@ -73,14 +65,6 @@ def callback(request):
                                     '\n'+'備註：' + str(i.remark) + '\n\n'
                         else:
                             if(i.job_type == '全職'):
-                                if(i.job_title == 'true'):
-                                    i.job_title = '是'
-                                else:
-                                    i.job_title = '否'
-                                if(i.job_title2 == 'true'):
-                                    i.job_title2 = '是'
-                                else:
-                                    i.job_title2 = '否'
                                 message += '姓名：' + str(i.name) + \
                                     '\n'+'工作種類：' + str(i.job_type) + \
                                     '\n' + '期望薪資：' + '月薪' + str(i.minSalary) + '~' + str(i.maxSalary) + \
@@ -497,7 +481,7 @@ def update_Company(request, lineId, id):
         else:
             overtime_pay = '否'
         print(companyName, name, minSalary, maxSalary,
-              address, phone, remark, assistant, overtime_pay, job_type,welfare)
+              address, phone, remark, assistant, overtime_pay, job_type, welfare)
         if company.objects.filter(id=id).exists():
             try:
                 company.objects.filter(id=id).update(
@@ -505,7 +489,7 @@ def update_Company(request, lineId, id):
                     minSalary=minSalary, maxSalary=maxSalary,
                     address=address, Phone=phone, remark=remark,
                     assistant=assistant, overtime_pay=overtime_pay,
-                    job_type=job_type,welfare=welfare
+                    job_type=job_type, welfare=welfare
                 )
                 data = company.objects.get(id=id)  # 搜尋所有資料
                 dataCounty = data.address[:3]

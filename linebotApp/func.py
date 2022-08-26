@@ -92,6 +92,7 @@ def select_job(event, msg):
     cursor = connection.cursor()
     sql = job_type[2:]
     cursor.execute(sql)
+    
     if(assistant == 'true'):
         assistant = '是'
     else:

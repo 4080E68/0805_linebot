@@ -25,18 +25,18 @@
             <select class="form-select" aria-label="Default select example" id="job_type">
                 <option value="不拘">不拘</option>
                 <option value="支援">支援</option>
-                <option value="全職">全職</option> 
+                <option value="全職">全職</option>
             </select>
             <br>
             <p>期望薪資</p>
             <div class="row" id="Srow">
                 <div class="col input-group">
-                    <span class="input-group-text">月薪</span>
+                    <span class="input-group-text">薪資</span>
                     <input type="number" class="form-control" placeholder="最低薪資" aria-label="First name" id="Smin">
                 </div>
                 ~
                 <div class="col input-group">
-                    <span class="input-group-text">月薪</span>
+                    <span class="input-group-text">薪資</span>
                     <input type="number" class="form-control" placeholder="最高薪資" aria-label="Last name" id="Smax">
                 </div>
             </div>
@@ -67,6 +67,7 @@
                 </div>
             </div>
             <br>
+
 
             <div class="d-grid gap-2">
                 <button class="btn btn-success" type="button" onclick="push()">送出</button>
@@ -152,7 +153,7 @@
     let Srow = document.getElementById('Srow')
 
     job_type.addEventListener('change', () => {
-        if (job_type.value == '全職' || job_type.value == '不拘') {
+        if (job_type.value == '全職') {
             Srow.innerHTML = ''
             Srow.innerHTML = `
             <div class="row" id="Srow2">
@@ -179,6 +180,22 @@
                     <span class="input-group-text">時薪</span>
                     <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax">
                 </div>
+            `
+        }
+        if (job_type.value == '不拘') {
+            Srow.innerHTML = ''
+            Srow.innerHTML = `
+            <div class="row" id="Srow2">
+                    <div class="col input-group">
+                        <span class="input-group-text">薪資</span>
+                        <input type="number" class="form-control" placeholder="最低薪資" aria-label="First name" id="Smin">
+                    </div>
+                    ~
+                    <div class="col input-group">
+                        <span class="input-group-text">薪資</span>
+                        <input type="number" class="form-control" placeholder="最高薪資" aria-label="Last name" id="Smax">
+                    </div>
+            </div>
             `
         }
     })

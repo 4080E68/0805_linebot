@@ -28,20 +28,19 @@
                 <option value="全職">全職</option>
             </select>
             <br>
-            <p>期望薪資</p>
             <div class="row" id="Srow">
+                <label for="Smin" class="form-label">期望薪資</label>
                 <div class="col input-group">
-                    <span class="input-group-text">月薪</span>
+                    <span class="input-group-text">薪資</span>
                     <input type="number" class="form-control" placeholder="最低薪資" aria-label="First name" id="Smin">
                 </div>
                 ~
                 <div class="col input-group">
-                    <span class="input-group-text">月薪</span>
+                    <span class="input-group-text">薪資</span>
                     <input type="number" class="form-control" placeholder="最高薪資" aria-label="Last name" id="Smax">
                 </div>
             </div>
-            <br>
-            <div class="row">
+            <div class="row" style="margin-top: 0.5rem;">
                 <div class="mb-3">
                     <label for="County" class="form-label">請選擇縣市</label>
                     <select class="form-select" id="County" required></select>
@@ -52,21 +51,7 @@
                     </select>
                 </div>
             </div>
-            <div class="row" id="jobTitle" style="margin-bottom: 1rem; margin-top: 1rem;">
-                <label class="form-label">可擔任職務</label>
-                <div class="col">
-                    <input class="form-check-input" type="checkbox" value="" id="job_title">
-                    <label class="form-check-label" for="job_title">
-                        負責人
-                    </label>
-                </div>
-                <div class="col">
-                    <input class="form-check-input" type="checkbox" value="" id="job_title2">
-                    <label class="form-check-label" for="job_title2">
-                        非負責人
-                    </label>
-                </div>
-            </div>
+
 
 
             <div class="d-grid gap-2">
@@ -174,10 +159,45 @@
     let Srow = document.getElementById('Srow')
 
     job_type.addEventListener('change', () => {
-        if (job_type.value == '全職' || job_type.value == '不拘') {
+        if (job_type.value == '不拘') {
             Srow.innerHTML = ''
             Srow.innerHTML = `
             <div class="row" id="Srow2">
+                    <label for="Smin" class="form-label">期望薪資</label>
+                    <div class="col input-group">
+                        <span class="input-group-text">薪資</span>
+                        <input type="number" class="form-control" placeholder="最低薪資" aria-label="First name" id="Smin">
+                    </div>
+                    ~
+                    <div class="col input-group">
+                        <span class="input-group-text">薪資</span>
+                        <input type="number" class="form-control" placeholder="最高薪資" aria-label="Last name" id="Smax">
+                    </div>
+            </div>
+            <br>
+            `
+        } else {
+            Srow.innerHTML = ''
+            Srow.innerHTML = `
+            <div class="row" id="Srow2">
+                    <label for="Smin" class="form-label">期望薪資</label>
+                    <div class="col input-group">
+                        <span class="input-group-text">時薪</span>
+                        <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin">
+                    </div>
+                    ~
+                    <div class="col input-group">
+                        <span class="input-group-text">時薪</span>
+                        <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax">
+                    </div>
+            </div>
+            <br>
+            `
+        }
+
+        if (job_type.value == '全職') {
+            Srow.innerHTML = `
+            <label for="Smin" class="form-label">期望薪資</label>
                     <div class="col input-group">
                         <span class="input-group-text">月薪</span>
                         <input type="number" class="form-control" placeholder="最低薪資" aria-label="First name" id="Smin">
@@ -187,20 +207,21 @@
                         <span class="input-group-text">月薪</span>
                         <input type="number" class="form-control" placeholder="最高薪資" aria-label="Last name" id="Smax">
                     </div>
+            <div class="row" id="jobTitle" style=" margin-top: 1rem;">
+                <label class="form-label">可擔任職務</label>
+                <div class="col">
+                    <input class="form-check-input" type="checkbox" value="" id="job_title">
+                    <label class="form-check-label" for="job_title">
+                        負責人
+                    </label>
+                </div>
+                <div class="col">
+                    <input class="form-check-input" type="checkbox" value="" id="job_title2">
+                    <label class="form-check-label" for="job_title2">
+                        非負責人
+                    </label>
+                </div>
             </div>
-            `
-        } else {
-            Srow.innerHTML = ''
-            Srow.innerHTML = `
-            <div class="col input-group">
-                    <span class="input-group-text">時薪</span>
-                    <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin">
-                </div>
-                ~
-                <div class="col input-group">
-                    <span class="input-group-text">時薪</span>
-                    <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax">
-                </div>
             `
         }
     })
@@ -221,13 +242,30 @@
         let address = document.getElementById('address').value
         let County_result = document.getElementById('County').value
         let job_type = document.getElementById('job_type').value
-        let job_title = document.getElementById('job_title').checked
-        let job_title2 = document.getElementById('job_title2').checked
-        if(job_title == false){
+        let job_title = document.getElementById('job_title')
+        let job_title2 = document.getElementById('job_title2')
+        if (job_title == false && job_title) {
             job_title = ''
+        } else if (job_title == true && job_title) {
+            job_title = document.getElementById('job_title').checked
+        } else {
+            if (job_type == '不拘') {
+                job_title = ''
+            } else {
+                job_title = '否'
+            }
+
         }
-        if (job_title2 == false) {
+        if (job_title2 == false && job_title2) {
             job_title2 = ''
+        } else if (job_title2 == true && job_title2) {
+            job_title2 = document.getElementById('job_title2').checked
+        } else {
+            if (job_type == '不拘') {
+                job_title2 = ''
+            } else {
+                job_title2 = '否'
+            }
         }
         if (Smin == '' || Smax == '') {
             return alert('請填寫薪資！')
