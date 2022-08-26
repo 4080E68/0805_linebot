@@ -45,23 +45,11 @@
                     <input type="number" class="form-control" placeholder="最低月薪" aria-label="First name" id="Smin"
                         value="{{data.minSalary}}" name="Smin">
                 </div>
-                ~
-                <div class="col input-group">
-                    <span class="input-group-text">月薪</span>
-                    <input type="number" class="form-control" placeholder="最高月薪" aria-label="Last name" id="Smax"
-                        value="{{data.maxSalary}}" name="Smax">
-                </div>
                 {% else %}
                 <div class="col input-group">
                     <span class="input-group-text">時薪</span>
                     <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin"
                         value="{{data.minSalary}}" name="Smin">
-                </div>
-                ~
-                <div class="col input-group">
-                    <span class="input-group-text">時薪</span>
-                    <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax"
-                        value="{{data.maxSalary}}" name="Smax">
                 </div>
                 {% endif %}
 
@@ -253,11 +241,7 @@
                         <span class="input-group-text">月薪</span>
                         <input type="number" class="form-control" placeholder="最低薪資" aria-label="First name" id="Smin" name="Smin">
                     </div>
-                    ~
-                    <div class="col input-group">
-                        <span class="input-group-text">月薪</span>
-                        <input type="number" class="form-control" placeholder="最高薪資" aria-label="Last name" id="Smax" name="Smax">
-                    </div>
+                    
             </div>
             `
         } else {
@@ -267,11 +251,7 @@
                     <span class="input-group-text">時薪</span>
                     <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin" name="Smin">
                 </div>
-                ~
-                <div class="col input-group">
-                    <span class="input-group-text">時薪</span>
-                    <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax" name="Smax">
-                </div>
+               
             `
         }
     })

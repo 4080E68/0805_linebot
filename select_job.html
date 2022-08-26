@@ -52,21 +52,6 @@
                     </select>
                 </div>
             </div>
-            <div class="row">
-                <div class="col">
-                    <input class="form-check-input" type="checkbox" value="" id="assistant" checked>
-                    <label class="form-check-label" for="assistant">
-                        是否有提供助理
-                    </label>
-                </div>
-                <div class="col">
-                    <input class="form-check-input" type="checkbox" value="" id="overtime_pay" checked>
-                    <label class="form-check-label" for="overtime_pay">
-                        是否有提供加班費
-                    </label>
-                </div>
-            </div>
-            <br>
 
 
             <div class="d-grid gap-2">
@@ -235,8 +220,6 @@
         let Smax = document.getElementById('Smax').value
         let address = document.getElementById('address').value
         let County_result = document.getElementById('County').value
-        let assistant = document.getElementById('assistant').checked
-        let overtime_pay = document.getElementById('overtime_pay').checked
         let job_type = document.getElementById('job_type').value
         if (Smin == '' || Smax == '') {
             return alert('請填寫薪資！')
@@ -246,8 +229,6 @@
             msg = msg + Smin + "&";
             msg = msg + Smax + "&";
             msg = msg + County_result + address + "&";
-            msg = msg + assistant + "&";
-            msg = msg + overtime_pay + "&";
             msg = msg + job_type;
 
             console.log(msg);

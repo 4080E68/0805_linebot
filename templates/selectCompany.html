@@ -36,7 +36,7 @@
             <div class="card-body">
                 <h5 class="card-title">聯絡人：{{i.name}}</h5>
                 <p class="card-text">工作性質：{{i.job_type}}</p>
-                <p class="card-text">提供薪資：月薪{{i.minSalary}}~{{i.maxSalary}}</p>
+                <p class="card-text">提供薪資：月薪{{i.minSalary}}</p>
                 <p class="card-text">公司地址：{{i.address}}</p>
                 <p class="card-text">聯絡電話：{{i.Phone}}</p>
                 <div class="row" style="margin-bottom: 0.5rem;">
@@ -50,8 +50,7 @@
                 <p class="card-text">提供福利：{{i.welfare}}</p>
                 <form action="" method="post">
                     {% csrf_token %}
-                    <a href=https://w1.linebot.com.tw/updateCompany/{{i.lineId}}/{{i.id}}
-                        class="btn btn-primary">修改</a>
+                    <a href=https://w1.linebot.com.tw/updateCompany/{{i.lineId}}/{{i.id}} class="btn btn-primary">修改</a>
                     <button type="submit" class="btn btn-danger" id="{{i.id}}" name="del" value="{{i.id}}"
                         onclick="test(this.value,this.id)">刪除</button>
                 </form>
@@ -63,7 +62,7 @@
             <div class="card-body">
                 <h5 class="card-title">聯絡人：{{i.name}}</h5>
                 <p class="card-text">工作性質：{{i.job_type}}</p>
-                <p class="card-text">提供薪資：時薪{{i.minSalary}}~{{i.maxSalary}}</p>
+                <p class="card-text">提供薪資：時薪{{i.minSalary}}</p>
                 <p class="card-text">公司地址：{{i.address}}</p>
                 <p class="card-text">聯絡電話：{{i.Phone}}</p>
                 <div class="row" style="margin-bottom: 0.5rem;">
@@ -77,8 +76,7 @@
                 <p class="card-text">提供福利：{{i.welfare}}</p>
                 <form action="" method="post">
                     {% csrf_token %}
-                    <a href=https://w1.linebot.com.tw/updateCompany/{{i.lineId}}/{{i.id}}
-                        class="btn btn-primary">修改</a>
+                    <a href=https://w1.linebot.com.tw/updateCompany/{{i.lineId}}/{{i.id}} class="btn btn-primary">修改</a>
                     <button type="submit" class="btn btn-danger" id="{{i.id}}" name="del" value="{{i.id}}"
                         onclick="test(this.value,this.id)">刪除</button>
                 </form>

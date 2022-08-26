@@ -465,7 +465,6 @@ def update_Company(request, lineId, id):
         name = request.POST['name']
         job_type = request.POST['job_type']
         minSalary = request.POST['Smin']
-        maxSalary = request.POST['Smax']
         address = request.POST['County']+request.POST['address']
         phone = request.POST['phone']
         remark = request.POST['remark']
@@ -480,13 +479,13 @@ def update_Company(request, lineId, id):
             overtime_pay = '是'
         else:
             overtime_pay = '否'
-        print(companyName, name, minSalary, maxSalary,
+        print(companyName, name, minSalary,
               address, phone, remark, assistant, overtime_pay, job_type, welfare)
         if company.objects.filter(id=id).exists():
             try:
                 company.objects.filter(id=id).update(
                     companyName=companyName, name=name,
-                    minSalary=minSalary, maxSalary=maxSalary,
+                    minSalary=minSalary,
                     address=address, Phone=phone, remark=remark,
                     assistant=assistant, overtime_pay=overtime_pay,
                     job_type=job_type, welfare=welfare

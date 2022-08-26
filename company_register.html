@@ -39,12 +39,7 @@
             <div class="row" id="Srow">
                 <div class="col input-group">
                     <span class="input-group-text">時薪</span>
-                    <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin">
-                </div>
-                ~
-                <div class="col input-group">
-                    <span class="input-group-text">時薪</span>
-                    <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax">
+                    <input type="number" class="form-control" placeholder="提供時薪" aria-label="First name" id="Smin">
                 </div>
             </div>
             <br>
@@ -223,13 +218,9 @@
             <div class="row" id="Srow2">
                     <div class="col input-group">
                         <span class="input-group-text">月薪</span>
-                        <input type="number" class="form-control" placeholder="最低薪資" aria-label="First name" id="Smin">
+                        <input type="number" class="form-control" placeholder="提供薪資" aria-label="First name" id="Smin">
                     </div>
-                    ~
-                    <div class="col input-group">
-                        <span class="input-group-text">月薪</span>
-                        <input type="number" class="form-control" placeholder="最高薪資" aria-label="Last name" id="Smax">
-                    </div>
+                   
             </div>
             `
         } else {
@@ -237,13 +228,9 @@
             Srow.innerHTML = `
             <div class="col input-group">
                     <span class="input-group-text">時薪</span>
-                    <input type="number" class="form-control" placeholder="最低時薪" aria-label="First name" id="Smin">
+                    <input type="number" class="form-control" placeholder="提供時薪" aria-label="First name" id="Smin">
                 </div>
-                ~
-                <div class="col input-group">
-                    <span class="input-group-text">時薪</span>
-                    <input type="number" class="form-control" placeholder="最高時薪" aria-label="Last name" id="Smax">
-                </div>
+               
             `
         }
     })
@@ -321,7 +308,7 @@
         let companyName = document.getElementById('companyName').value
         let name = document.getElementById('name').value
         let Smin = document.getElementById('Smin').value
-        let Smax = document.getElementById('Smax').value
+        // let Smax = document.getElementById('Smax').value
         let address = document.getElementById('address').value
         let phone = document.getElementById('phone').value
         let County_result = document.getElementById('County').value
@@ -336,7 +323,7 @@
         }
         // let select = document.getElementById('select').value
         let form = document.getElementById('form')
-        if (name == '' || Smin == '' || Smax == '' || phone == '' || companyName == '') {
+        if (name == '' || Smin == '' || phone == '' || companyName == '') {
             return alert('請填寫所需資料！')
         }
         else {
@@ -344,7 +331,7 @@
             msg = msg + companyName + "&";
             msg = msg + name + "&";
             msg = msg + Smin + "&";
-            msg = msg + Smax + "&";
+            // msg = msg + Smax + "&";
             msg = msg + County_result + address + "&";
             msg = msg + phone + "&";
             msg = msg + remark + "&";
