@@ -244,29 +244,26 @@
         let job_type = document.getElementById('job_type').value
         let job_title = document.getElementById('job_title')
         let job_title2 = document.getElementById('job_title2')
-        if (job_title == false && job_title) {
-            job_title = ''
-        } else if (job_title == true && job_title) {
-            job_title = document.getElementById('job_title').checked
-        } else {
-            if (job_type == '不拘') {
+        if (job_title) {
+            if (job_title.checked == false) {
                 job_title = ''
             } else {
-                job_title = '否'
+                job_title = job_title.checked
             }
-
         }
-        if (job_title2 == false && job_title2) {
-            job_title2 = ''
-        } else if (job_title2 == true && job_title2) {
-            job_title2 = document.getElementById('job_title2').checked
-        } else {
-            if (job_type == '不拘') {
+        if (job_title2) {
+            if (job_title2.checked == false) {
                 job_title2 = ''
             } else {
-                job_title2 = '否'
+                job_title2 = job_title2.checked
             }
         }
+
+        if (job_type == '不拘' || job_type == '支援') {
+            job_title = ''
+            job_title2 = ''
+        }
+
         if (Smin == '' || Smax == '') {
             return alert('請填寫薪資！')
         }
