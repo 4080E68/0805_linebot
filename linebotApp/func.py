@@ -94,24 +94,25 @@ def select_job(event, msg):
         address = address[:3] + '%'
         if(job_type == '不拘'):
             result = company.objects.raw(
-                "select * from linebotApp_company where minSalary >= %s and maxSalary<=%s and address like %s ", [Smin, Smax, address])
+                "select * from linebotApp_company where minSalary >= %s and minSalary<=%s and address like %s ", [Smin, Smax, address])
         else:
             result = company.objects.raw(
-                "select * from linebotApp_company where job_type=%s and minSalary >= %s and maxSalary<=%s and address like %s ", [job_type, Smin, Smax, address])
+                "select * from linebotApp_company where job_type=%s and minSalary >= %s and minSalary<=%s and address like %s ", [job_type, Smin, Smax, address])
     else:
         if(job_type == '不拘'):
             result = company.objects.raw(
-                "select * from linebotApp_company where minSalary >= %s and maxSalary<=%s and address=%s \
+                "select * from linebotApp_company where minSalary >= %s and minSalary<=%s and address=%s \
                     ", [Smin, Smax, address])
         else:
             result = company.objects.raw(
-                "select * from linebotApp_company where job_type=%s and minSalary >= %s and maxSalary<=%s and address=%s \
+                "select * from linebotApp_company where job_type=%s and minSalary >= %s and minSalary<=%s and address=%s \
                     ", [job_type, Smin, Smax, address])
     print(result)
     message = ''
     count = 0
     if(len(result) == 0):
-        message = '查無資料！'
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage('查無資料！'))
     else:
         for i in result:
             count += 1
@@ -123,25 +124,25 @@ def select_job(event, msg):
                 message += '執業場所名稱：' + str(i.companyName) + '\n' \
                     '聯絡人：' + str(i.name) + '\n'\
                     '工作性質：' + str(i.job_type) + '\n'\
-                    '提供薪資：' + str(i.minSalary)+'~' + str(i.maxSalary) + '\n'\
+                    '提供薪資：' + str(i.minSalary) + '\n'\
                     '聯絡電話：' + str(i.Phone) + '\n'\
                     '工作地點：' + str(i.address) + '\n'\
                     '備註：' + str(i.remark) + '\n'\
+                    '福利：' + str(i.welfare) +\
                     '是否有提供助理：' + str(i.assistant) + '\n'\
-                    '是否有提供加班費：' + str(i.overtime_pay) + '\n'\
-                    '福利：' + str(i.welfare) + '\n\n'
+                    '是否有提供加班費：' + str(i.overtime_pay) + '\n\n'
             else:
                 message += '執業場所名稱：' + str(i.companyName) + '\n' \
                     '聯絡人：' + str(i.name) + '\n'\
                     '工作性質：' + str(i.job_type) + '\n'\
-                    '提供薪資：' + str(i.minSalary)+'~' + str(i.maxSalary) + '\n'\
+                    '提供薪資：' + str(i.minSalary) + '\n'\
                     '聯絡電話：' + str(i.Phone) + '\n'\
                     '工作地點：' + str(i.address) + '\n'\
                     '備註：' + str(i.remark) + '\n'\
+                    '福利：' + str(i.welfare) + '\n'\
                     '是否有提供助理：' + str(i.assistant) + '\n'\
-                    '是否有提供加班費：' + str(i.overtime_pay) + '\n'\
-                    '福利：' + str(i.welfare)
-
+                    '是否有提供加班費：' + str(i.overtime_pay)
+        print(message)
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(message))
 
