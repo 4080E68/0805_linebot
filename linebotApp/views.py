@@ -465,6 +465,7 @@ def update_Company(request, lineId, id):
         name = request.POST['name']
         job_type = request.POST['job_type']
         minSalary = request.POST['Smin']
+        maxSalary = request.POST['Smax']
         address = request.POST['County']+request.POST['address']
         phone = request.POST['phone']
         remark = request.POST['remark']
@@ -485,7 +486,7 @@ def update_Company(request, lineId, id):
             try:
                 company.objects.filter(id=id).update(
                     companyName=companyName, name=name,
-                    minSalary=minSalary,
+                    minSalary=minSalary,maxSalary=maxSalary,
                     address=address, Phone=phone, remark=remark,
                     assistant=assistant, overtime_pay=overtime_pay,
                     job_type=job_type, welfare=welfare

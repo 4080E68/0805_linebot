@@ -151,8 +151,8 @@
             <input type="hidden" name="welfare" value="" id="welfare">
             <br>
             <div class="d-grid gap-2">
-                <button class="btn btn-primary" type="submit">送出</button>
-                <button class="btn btn-secondary" type="button"
+                <button class="btn btn-primary" type="submit" id="btnPush">送出</button>
+                <button class="btn btn-secondary" type="button" 
                     onclick="location.href='https://w1.linebot.com.tw/selectCompany/{{data.lineId}}'">返回上一頁</button>
             </div>
         </form>
@@ -239,6 +239,11 @@
     let assistant = document.getElementById('assistant')
     let overtime_pay = document.getElementById('overtime_pay')
     let job_type = document.getElementById('job_type')
+    const btnPush = document.getElementById('btnPush')
+    console.log(btnPush);
+    btnPush.addEventListener('click',()=>{
+        alert('修改成功！您現在可以關閉此視窗')
+    })
     for (let i = 0; i < job_type.children.length; i++) {
         if (job_type.children[i].value == '{{data.job_type}}') {
             job_type.children[i].selected = true
