@@ -62,16 +62,17 @@ def company_register(event, msg, lineId):  # 求才註冊資料
     companyName = flist[0]
     name = flist[1]
     minSalary = flist[2]
-    address = flist[3]
-    Phone = flist[4]
-    remark = flist[5]
-    assistant = flist[6]
-    overtime_pay = flist[7]
-    job_type = flist[8]
-    welfare = flist[9]
+    maxSalary = flist[3]
+    address = flist[4]
+    Phone = flist[5]
+    remark = flist[6]
+    assistant = flist[7]
+    overtime_pay = flist[8]
+    job_type = flist[9]
+    welfare = flist[10]
 
     user = company.objects.create(
-        companyName=companyName, name=name, minSalary=minSalary, address=address, Phone=Phone,
+        companyName=companyName, name=name, minSalary=minSalary, maxSalary=maxSalary, address=address, Phone=Phone,
         remark=remark, assistant=assistant, overtime_pay=overtime_pay, lineId=lineId, job_type=job_type, welfare=welfare)
     user.save()
 
@@ -92,21 +93,19 @@ def select_job(event, msg):
 
     if address[3:] == '不拘':
         address = address[:3] + '%'
-        if(job_type == '不拘'):
+        if(job_type == '不拘'):#當工作類型是不拘而且地區也是不拘
             result = company.objects.raw(
-                "select * from linebotApp_company where minSalary >= %s and minSalary<=%s and address like %s ", [Smin, Smax, address])
+                "select * from linebotApp_company where minSalary >= %s and minSalary<=%s and address like %s", [Smin, Smax, address])
         else:
             result = company.objects.raw(
-                "select * from linebotApp_company where job_type=%s and minSalary >= %s and minSalary<=%s and address like %s ", [job_type, Smin, Smax, address])
+                "select * from linebotApp_company where job_type=%s and minSalary >= %s and minSalary<=%s and address like %s", [job_type, Smin, Smax, address])
     else:
-        if(job_type == '不拘'):
+        if(job_type == '不拘'):#當工作類型是不拘但地區不是不拘
             result = company.objects.raw(
-                "select * from linebotApp_company where minSalary >= %s and minSalary<=%s and address=%s \
-                    ", [Smin, Smax, address])
+                "select * from linebotApp_company where minSalary >= %s and minSalary<=%s and address=%s", [Smin, Smax, address])
         else:
             result = company.objects.raw(
-                "select * from linebotApp_company where job_type=%s and minSalary >= %s and minSalary<=%s and address=%s \
-                    ", [job_type, Smin, Smax, address])
+                "select * from linebotApp_company where job_type=%s and minSalary >= %s and minSalary<=%s and address=%s", [job_type, Smin, Smax, address])
     print(result)
     message = ''
     count = 0
@@ -128,9 +127,9 @@ def select_job(event, msg):
                     '聯絡電話：' + str(i.Phone) + '\n'\
                     '工作地點：' + str(i.address) + '\n'\
                     '備註：' + str(i.remark) + '\n'\
-                    '福利：' + str(i.welfare) +\
+                    '是否有提供加班費：' + str(i.overtime_pay) + '\n'\
                     '是否有提供助理：' + str(i.assistant) + '\n'\
-                    '是否有提供加班費：' + str(i.overtime_pay) + '\n\n'
+                    '福利：' + str(i.welfare)+ '\n\n'
             else:
                 message += '執業場所名稱：' + str(i.companyName) + '\n' \
                     '聯絡人：' + str(i.name) + '\n'\
@@ -139,10 +138,9 @@ def select_job(event, msg):
                     '聯絡電話：' + str(i.Phone) + '\n'\
                     '工作地點：' + str(i.address) + '\n'\
                     '備註：' + str(i.remark) + '\n'\
-                    '福利：' + str(i.welfare) + '\n'\
+                    '是否有提供加班費：' + str(i.overtime_pay) + '\n'\
                     '是否有提供助理：' + str(i.assistant) + '\n'\
-                    '是否有提供加班費：' + str(i.overtime_pay)
-        print(message)
+                    '福利：' + str(i.welfare)
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(message))
 
@@ -168,14 +166,14 @@ def select_staff(event, msg):
                 "select * from linebotApp_job_hunting where minSalary >= %s and maxSalary<=%s and address like %s and job_title like %s and job_title2 like %s", [Smin, Smax, address, job_title, job_title2])
         else:
             result = job_hunting.objects.raw(
-                "select * from linebotApp_job_hunting where job_type=%s and minSalary >= %s and maxSalary<=%s and address like %s and job_title like %s and job_title2 like %s", [job_type, Smin, Smax, address, job_title, job_title2])
+                "select * from linebotApp_job_hunting where (job_type=%s and minSalary >= %s and maxSalary<=%s and address like %s and job_title like %s and job_title2 like %s) or (job_type=%s and minSalary<%s and address like %s and job_title like %s and job_title2 like %s)", [job_type, Smin, Smax, address, job_title, job_title2,job_type, Smin, address, job_title, job_title2])
     else:
         if(job_type == '不拘'):
             result = job_hunting.objects.raw(
                 "select * from linebotApp_job_hunting where minSalary >= %s and maxSalary<=%s and address=%s and job_title like %s and job_title2 like %s", [Smin, Smax, address, job_title, job_title2])
         else:
             result = job_hunting.objects.raw(
-                "select * from linebotApp_job_hunting where job_type=%s and minSalary >= %s and maxSalary<=%s and address like %s and job_title like %s and job_title2 like %s", [job_type, Smin, Smax, address, job_title, job_title2])
+                "select * from linebotApp_job_hunting where (job_type=%s and minSalary >= %s and maxSalary<=%s and address like %s and job_title like %s and job_title2 like %s) or (job_type=%s and minSalary<%s and address like %s and job_title like %s and job_title2 like %s)", [job_type, Smin, Smax, address, job_title, job_title2,job_type, Smin, address, job_title, job_title2])
     message = ''
     count = 0
     print(result)

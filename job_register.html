@@ -203,12 +203,16 @@
     County_data.forEach((e, index) => {
         County.options[County.options.length] = new Option(e, e);
     })
+    address.options[address.options.length] = new Option('不拘', '不拘');
+
     area_data.臺北市.forEach((e) => {
         address.options[address.options.length] = new Option(e, e);
     })
     County.addEventListener('change', () => {
         let County_result = document.getElementById('County').value
         address.innerHTML = ''
+        address.options[address.options.length] = new Option('不拘', '不拘');
+
         for (let i in area_data) {
             if (i == County_result) {
                 area_data[i].forEach((e) => {
