@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <title>使用說明</title>
+</head>
+
+<body>
+    <style>
+        p {
+            font-size: 1.25rem;
+        }
+
+        h3 {
+            font-weight: bolder;
+        }
+    </style>
+
+    <div class="container">
+        <br>
+        <div class="text-center">
+            <h1>使用說明</h1>
+        </div>
+        <br>
+        <h3>使用說明</h3>
+        <hr>
+        <p>
+            如果您是求職者，請先註冊求職資料，，再按『我要求職』按鈕！初期因為資料庫資料不多，可能找不到資料，請過一陣子再上來使用！
+        </p>
+        <p>
+            如果您是求職才者，請先註冊求才資料，再按『我要求才』按鈕！初期因為資料庫資料不多，可能找不到資料，請過一陣子再上來使用！
+
+        </p>
+        <p>為鼓勵您多加利用，我們會於每個月抽出5位幸運者，贈送一百元全聯禮券！</p>
+
+        <h3>聯絡方式</h3>
+        <hr>
+        <p>電話：<a href="tel:+886-980347570">0980347570</a></p>
+        <p>Line ID：<a href="https://line.me/ti/p/qUu6cBPMG">9fate8</a></p>
+        <p>Email: <a href="mailto:wii543@gmail.com">wii543@gmail.com</a></p>
+
+
+    </div>
+</body>
+<script>
+    liff
+        .init({
+            liffId: "1656626380-ZrL4j5xO", // Use own liffId
+        })
+
+        .then((profile) => {
+            liff.getProfile();
+            const userId = profile.userId;
+        })
+</script>
+
+</html>
