@@ -93,19 +93,25 @@ def select_job(event, msg):
 
     if address[3:] == '不拘':
         address = address[:3] + '%'
-        if(job_type == '不拘'):#當工作類型是不拘而且地區也是不拘
-            result = company.objects.raw(
-                "select * from linebotApp_company where minSalary >= %s and minSalary<=%s and address like %s", [Smin, Smax, address])
-        else:
-            result = company.objects.raw(
-                "select * from linebotApp_company where job_type=%s and minSalary >= %s and minSalary<=%s and address like %s", [job_type, Smin, Smax, address])
+        result = company.objects.raw(
+                "select * from linebotApp_company where (job_type=%s and minSalary <= %s and maxSalary>=%s and address like %s) \
+                or (job_type=%s and minSalary <= %s and maxSalary>=%s and address like %s) \
+                or (job_type=%s and minSalary >= %s and address like %s) \
+                or (job_type=%s and minSalary >= %s and maxSalary<=%s and address like %s)",
+                [job_type, Smin, Smin, address,
+                job_type, Smax, Smax, address,
+                job_type,Smax,address
+                ,job_type, Smin, Smax, address])
     else:
-        if(job_type == '不拘'):#當工作類型是不拘但地區不是不拘
-            result = company.objects.raw(
-                "select * from linebotApp_company where minSalary >= %s and minSalary<=%s and address=%s", [Smin, Smax, address])
-        else:
-            result = company.objects.raw(
-                "select * from linebotApp_company where job_type=%s and minSalary >= %s and minSalary<=%s and address=%s", [job_type, Smin, Smax, address])
+        result = company.objects.raw(
+                "select * from linebotApp_company where (job_type=%s and minSalary <= %s and maxSalary>=%s and address=%s) \
+                or (job_type=%s and minSalary <= %s and maxSalary>=%s and address=%s) \
+                or (job_type=%s and minSalary >= %s and address=%s) \
+                or (job_type=%s and minSalary >= %s and maxSalary<=%s and address=%s)",
+                [job_type, Smin, Smin, address,
+                job_type, Smax, Smax, address,
+                job_type,Smax,address
+                ,job_type, Smin, Smax, address])
     print(result)
     message = ''
     count = 0
@@ -123,7 +129,7 @@ def select_job(event, msg):
                 message += '執業場所名稱：' + str(i.companyName) + '\n' \
                     '聯絡人：' + str(i.name) + '\n'\
                     '工作性質：' + str(i.job_type) + '\n'\
-                    '提供薪資：' + str(i.minSalary) + '\n'\
+                    '提供薪資：' + str(i.minSalary)+'~'+str(i.maxSalary) + '\n'\
                     '聯絡電話：' + str(i.Phone) + '\n'\
                     '工作地點：' + str(i.address) + '\n'\
                     '備註：' + str(i.remark) + '\n'\
@@ -134,7 +140,7 @@ def select_job(event, msg):
                 message += '執業場所名稱：' + str(i.companyName) + '\n' \
                     '聯絡人：' + str(i.name) + '\n'\
                     '工作性質：' + str(i.job_type) + '\n'\
-                    '提供薪資：' + str(i.minSalary) + '\n'\
+                    '提供薪資：' + str(i.minSalary) +'~'+str(i.maxSalary)+'\n'\
                     '聯絡電話：' + str(i.Phone) + '\n'\
                     '工作地點：' + str(i.address) + '\n'\
                     '備註：' + str(i.remark) + '\n'\
@@ -161,19 +167,19 @@ def select_staff(event, msg):
     job_title2 = '%' + job_title2 + '%'
     if address[3:] == '不拘':
         address = address[:3] + '%'
-        if(job_type == '不拘'):
-            result = job_hunting.objects.raw(
-                "select * from linebotApp_job_hunting where minSalary >= %s and maxSalary<=%s and address like %s and job_title like %s and job_title2 like %s", [Smin, Smax, address, job_title, job_title2])
-        else:
-            result = job_hunting.objects.raw(
-                "select * from linebotApp_job_hunting where (job_type=%s and minSalary >= %s and maxSalary<=%s and address like %s and job_title like %s and job_title2 like %s) or (job_type=%s and minSalary<%s and address like %s and job_title like %s and job_title2 like %s)", [job_type, Smin, Smax, address, job_title, job_title2,job_type, Smin, address, job_title, job_title2])
+        result = job_hunting.objects.raw(
+                "select * from linebotApp_job_hunting where (job_type=%s and minSalary >= %s and maxSalary<=%s and address like %s and job_title like %s and job_title2 like %s) \
+                or (job_type=%s and minSalary<=%s and address like %s and job_title like %s and job_title2 like %s) \
+                or (job_type=%s and minSalary<=%s and maxSalary>=%s  and address like %s and job_title like %s and job_title2 like %s)"                
+                , [job_type, Smin, Smax, address, job_title, job_title2,
+                    job_type, Smin, address, job_title, job_title2,
+                    job_type, Smax, Smax, address, job_title, job_title2])
     else:
-        if(job_type == '不拘'):
-            result = job_hunting.objects.raw(
-                "select * from linebotApp_job_hunting where minSalary >= %s and maxSalary<=%s and address=%s and job_title like %s and job_title2 like %s", [Smin, Smax, address, job_title, job_title2])
-        else:
-            result = job_hunting.objects.raw(
-                "select * from linebotApp_job_hunting where (job_type=%s and minSalary >= %s and maxSalary<=%s and address like %s and job_title like %s and job_title2 like %s) or (job_type=%s and minSalary<%s and address like %s and job_title like %s and job_title2 like %s)", [job_type, Smin, Smax, address, job_title, job_title2,job_type, Smin, address, job_title, job_title2])
+        result = job_hunting.objects.raw(
+                "select * from linebotApp_job_hunting where (job_type=%s and minSalary >= %s and maxSalary<=%s and address like %s and job_title like %s and job_title2 like %s) \
+                or (job_type=%s and minSalary<=%s and address like %s and job_title like %s and job_title2 like %s)"
+                , [job_type, Smin, Smax, address, job_title, job_title2,
+                    job_type, Smin, address, job_title, job_title2])
     message = ''
     count = 0
     print(result)
